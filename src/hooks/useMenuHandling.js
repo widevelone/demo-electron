@@ -10,7 +10,6 @@ const useMenuHandling = (menuNameCurrent) => {
     const currentMenu = useSelector(state => state.login.currentMenu);
 
     const [menuName, setMenuName] = useState(params["*"]);
-
     useEffect(() => {
         if (params["*"] === menuNameCurrent) {
             if (currentRol?.menus.find(r => r.nombre === menuNameCurrent)) {
@@ -22,7 +21,9 @@ const useMenuHandling = (menuNameCurrent) => {
 
     useEffect(() => {
         if (currentMenu.nombre != null && currentMenu.nombre !== params["*"]) {
-            dispatch(addCurrentMenu(currentRol?.menus.find(r => r.nombre === params["*"])));
+            if (currentRol?.menus.find(r => r.nombre === params["*"])) {
+                dispatch(addCurrentMenu(currentRol?.menus.find(r => r.nombre === params["*"])));
+            }
         }
     })
 

@@ -52,7 +52,7 @@ export const ModalForm = ({
                         })
                 }}
             >
-                {({ errors, isSubmitting, touched, values, handleChange }) => (
+                {({ errors, isSubmitting, touched, values, handleChange, setFieldValue }) => (
                     <Form className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <ModalHeader
                             setModal={setModal}
@@ -65,6 +65,7 @@ export const ModalForm = ({
                                     errors={errors}
                                     touched={touched}
                                     values={values}
+                                    setValues={setFieldValue}
                                     handleChange={handleChange}
                                 />
                             </ModalFormBody>
@@ -73,6 +74,7 @@ export const ModalForm = ({
                             buttonAccept={buttonLabel}
                             cancel={setModal}
                             disabled={disabled}
+                            isSubmitting={isSubmitting}
                         />
                     </Form>
                 )}

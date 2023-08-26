@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { toastOn } from '../../store/slices/toast'
 import { requestAuth } from '../../http/httpRequest'
 
-export const ModalFormField = ({ fields, errors, touched, values, handleChange }) => {
+export const ModalFormField = ({ fields, errors, touched, values, setValues, handleChange }) => {
     return (
         fields?.map((field, index) => (
             <React.Fragment
@@ -15,6 +15,7 @@ export const ModalFormField = ({ fields, errors, touched, values, handleChange }
                     errors={errors}
                     touched={touched}
                     values={values}
+                    setValues={setValues}
                     handleChange={handleChange}
                 />
             </React.Fragment>
@@ -23,12 +24,13 @@ export const ModalFormField = ({ fields, errors, touched, values, handleChange }
 }
 
 
-const FieldParam = ({ field, errors, touched, values, handleChange }) => {
+const FieldParam = ({ field, errors, touched, values, setValues, handleChange }) => {
     switch (field.type) {
         case "text":
         case "email":
         case "password":
         case "date":
+        case "number":
             return (
                 <div className="col-span-6 sm:col-span-4 md:col-span-3" >
                     <label htmlFor={field.name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
@@ -39,7 +41,7 @@ const FieldParam = ({ field, errors, touched, values, handleChange }) => {
                         type={field.type}
                         name={field.name}
                         id={field.name}
-                        className="shadow-sm outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-semibold disabled:opacity-55 disabled:text-gray-500 dark:disabled:text-gray-400"
+                        className="shadow-sm outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-semibold disabled:opacity-55 disabled:text-gray-500 dark:disabled:text-gray-400"
                         placeholder={field.placeholder}
                         required={field.required}
                         autoFocus={field.autoFocus}
@@ -51,6 +53,37 @@ const FieldParam = ({ field, errors, touched, values, handleChange }) => {
                         errors={errors}
                         touched={touched}
                     />
+                </div>
+            )
+        case "groupnumber":
+            return (
+                <div className="col-span-6 sm:col-span-4 md:col-span-3" >
+                    <label htmlFor={field.name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                        {field.label}
+                        {field.required && <RequiredPick />}
+                    </label>
+                    <div className="flex">
+                        <Field
+                            type={'number'}
+                            name={field.name}
+                            id={field.name}
+                            className="shadow-sm outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-semibold disabled:opacity-55 disabled:text-gray-500 dark:disabled:text-gray-400"
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            autoFocus={field.autoFocus}
+                            disabled={field.disabled}
+                            autoComplete="new-password"
+                        />
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-gray-300 rounded-r-lg dark:bg-gray-600 dark:text-gray-400 dark:border-gray-500">
+                            {field.subData}
+                        </span>
+                    </div>
+                    <ErrorLabel
+                        name={field.name}
+                        errors={errors}
+                        touched={touched}
+                    />
+
                 </div>
             )
         case "textArea":
@@ -129,6 +162,17 @@ const FieldParam = ({ field, errors, touched, values, handleChange }) => {
                     field={field}
                     errors={errors}
                     touched={touched}
+                />
+            )
+        case "doubleSelectApi":
+            return (
+                <DoubleSelectApi
+                    field={field}
+                    errors={errors}
+                    touched={touched}
+                    values={values}
+                    setValues={setValues}
+                    handleChange={handleChange}
                 />
             )
         case "checkboxes":
@@ -241,6 +285,123 @@ const SelectApi = ({ field, errors, touched }) => {
                 touched={touched}
             />
         </div>
+    )
+}
+
+const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChange }) => {
+    const dispatch = useDispatch()
+    const [list, setList] = useState([]);
+    const [subList, setSubList] = useState([]);
+    const [called, setCalled] = useState(false);
+    const getData = async () => {
+        await requestAuth(
+            'get',
+            field?.urlApi,
+            null
+        )
+            .then((response) => {
+                setList(response.data)
+            }
+            )
+            .catch(error => {
+                dispatch(toastOn({ type: "danger", message: error?.response?.data?.message || "error a listar las opciones" }))
+            })
+    }
+
+    useEffect(() => {
+        getData()
+        if (values[field.name] != null && values[field.name] !== '')
+            definedSubList(values[field.name])
+
+        setCalled(true)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const definedSubList = async (value) => {
+        if (called)
+        {
+            setValues(field.sub_name, '')
+            setSubList([])
+        }
+        if (value !== null && value !== '') {
+            await requestAuth(
+                'get',
+                field?.sub_urlApi.replace('{param}', value),
+                null
+            )
+                .then((response) => {
+                    setSubList(response.data)
+                }
+                )
+                .catch(error => {
+                    dispatch(toastOn({ type: "danger", message: error?.response?.data?.message || "error a listar las opciones" }))
+                })
+        }
+        else {
+            values[field.sub_name] = ''
+        }
+    }
+    return (
+        <>
+            <div className="col-span-6 sm:col-span-4 md:col-span-3" >
+                <label htmlFor={field.name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                    {field.label}
+                    {field.required && <RequiredPick />}
+                </label>
+                <Field
+                    id={field.name}
+                    as="select"
+                    name={field.name}
+                    required={field.required}
+                    onChange={(e) => {
+                        handleChange(e)
+                        definedSubList(e.target.value)
+                    }}
+                    className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                >
+                    <option value=''>...</option>
+                    {
+                        list?.map((option, index) => (
+                            <option value={option?.id} key={index}>{option?.nombre}</option>
+                        ))
+                    }
+                </Field>
+                <ErrorLabel
+                    name={field.name}
+                    errors={errors}
+                    touched={touched}
+                />
+            </div>
+            {
+                subList.length > 0 &&
+                < div className="col-span-6 sm:col-span-4 md:col-span-3" >
+                    <label htmlFor={field.sub_name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                        {field.sub_label}
+                        {field.required && <RequiredPick />}
+                    </label>
+                    <Field
+                        id={field.sub_name}
+                        as="select"
+                        name={field.sub_name}
+                        required={field.required}
+                        // onChange={(e) => console.log(e.target.value)}
+                        className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                        <option value=''>...</option>
+                        {
+                            subList?.map((option, index) => (
+                                <option value={option?.id} key={index}>{option?.etiqueta}</option>
+                            ))
+                        }
+                    </Field>
+                    <ErrorLabel
+                        name={field.sub_name}
+                        errors={errors}
+                        touched={touched}
+                    />
+                </div >
+            }
+        </>
     )
 }
 

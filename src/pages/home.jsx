@@ -14,7 +14,6 @@ export const Home = () => {
     const element = document.documentElement
 
     useEffect(() => {
-        // console.log("as")
         if (localStorage?.getItem("token")) {
           dispatch(loginOn())
           navigate("/")
@@ -41,7 +40,7 @@ export const Home = () => {
                     userDetail.rols.map((rol, index) => (
                         <Link
                             key={index}
-                            className={`flex justify-center transition ease-in-out border rounded-lg dark:border-gray-700 border-gray-200 ${rol.nombre === currentRol?.nombre ? 'dark:bg-yellow-700 bg-yellow-200' : 'bg-gray-50 dark:bg-gray-800'} dark:hover:bg-yellow-700 hover:bg-yellow-300 dark:hover:border-yellow-700 hover:border-yellow-200`}
+                            className={`flex justify-center transition ease-in-out border rounded-lg dark:border-gray-700 border-gray-200 ${rol.nombre === currentRol?.nombre ? 'dark:bg-gray-600 bg-yellow-200' : 'bg-gray-50 dark:bg-gray-800'} dark:hover:bg-gray-700 hover:bg-yellow-300 dark:hover:border-gray-700 hover:border-yellow-200`}
                             to={`rol/${rol.nombre}`}
                             onClick={() => dispatch(addCurrentRol(rol))}
                         >

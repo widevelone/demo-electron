@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { badgeStaticFormatStyle } from '../../utils/styleFormat';
+import { badgeBooleanStyle, badgeBooleanValue, badgeStaticFormatStyle } from '../../utils/styleFormat';
 
 const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecked, rowIndex, checkList, clickFunc }) => {
     const handleCheckboxChange = () => {
@@ -47,6 +47,8 @@ const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecke
             </div>
         } else if (head.tag) {
             return <span className={`text-xs mr-2 px-2.5 py-0.5 rounded ${badgeStaticFormatStyle(item[head.columns[0]])}`}>{item[head.columns[0]]}</span>
+        } else if (head.boolean) {
+            return <span className={`text-xs px-1.5 py-0.5 rounded ${badgeBooleanStyle(item[head.columns[0]])}`}>{badgeBooleanValue(item[head.columns[0]], head.boolenaOptions)}</span>
         } else {
             // return <CellFormat global={head} data={item[head.columns[0]]} />;
             return <div>
