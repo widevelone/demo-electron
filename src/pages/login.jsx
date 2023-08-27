@@ -54,14 +54,12 @@ export const Login = () => {
                 navigate("/")
                 dispatch(toastOn({ type: "success", message: "Inicio de sesión exitoso!" }))
                 dispatch(saveToken(response.data.token))
-                // console.log(response)
                 dispatch(saveUserDetail(response.data.user))
               }
               )
               .catch(error => {
                 setMessage(true)
                 setTextMessage(error?.response?.data?.message || 'Usuario o contraseña incorrectos!')
-                // dispatch(addUserDetail(null))
               })
           }}
         >

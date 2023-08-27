@@ -1,14 +1,15 @@
 import React from 'react'
 import logo from "../../assets/logo.png";
 import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export const Navbar = ({
     showSidebar,
     setSidebar,
     sidebar,
-    logout,
-    currentRol
+    logout
 }) => {
+    const params = useParams()
     return (
         <nav className="fixed top-0 z-20 w-full bg-yellow-500 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -30,11 +31,10 @@ export const Navbar = ({
                         <Link to="/" className="flex ml-2 md:mr-24 items-center" onClick={() => setSidebar(window.innerWidth < 640 ? false : sidebar)}>
                             <img src={logo} className="self-center h-10 ml-2 mr-3" alt="widev" />
                             <div>
-                                <div className="self-center font-semibold text-sm whitespace-nowrap dark:text-white hidden sm:block">WiDevel</div>
+                                <div className="self-center font-semibold text-sm whitespace-nowrap dark:text-white hidden sm:block">Soya Sari</div>
                                 {
-                                    currentRol?.nombre &&
-                                    <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[2px] text-gray-100'>{currentRol?.etiqueta?.toUpperCase()}</span></div>
-                                    // <i className="fa-solid fa-pen-to-square dark:text-gray-500 text-gray-400"></i>
+                                    params?.rolname &&
+                                    <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[2px] text-gray-100'>{params?.rolname?.toUpperCase()}</span></div>
                                 }
                             </div>
                         </Link>

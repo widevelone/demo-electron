@@ -3,7 +3,6 @@ export function validationDateParam(date) {
     let month = new Date(date).getMonth() + 1
     let day = new Date(date).getDate()
 
-    // console.log(date)
     year = year.toString().length < 4 ? "000" + year.toString() : year.toString()
     month = month.toString().length < 2 ? ("0" + month.toString()) : month.toString()
     day = day.toString().length < 2 ? ("0" + day.toString()) : day.toString()

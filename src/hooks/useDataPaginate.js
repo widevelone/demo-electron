@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { defaultPaginateParams } from "../utils/defaulStates";
+import { useNavigate } from "react-router-dom";
 
 export const useGeneralParams = (defaultPaginate) => {
     const dispatch = useDispatch()
     const [data, setData] = useState([]);
+    const navigate = useNavigate()
 
     const [paginate, setPaginate] = useState(defaultPaginateParams(defaultPaginate));
     const [selectedDay, setSelectedDay] = useState();
@@ -23,6 +25,7 @@ export const useGeneralParams = (defaultPaginate) => {
 
     return {
         dispatch,
+        navigate,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,

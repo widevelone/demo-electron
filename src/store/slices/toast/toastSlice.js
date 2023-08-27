@@ -5,8 +5,8 @@ export const toastSlice = createSlice({
     name: 'toast',
     initialState: {
         toastDefault: {
-            position: toast.POSITION.TOP_RIGHT,
-            className: 'foo-bar font-semibold text-sm',
+            position: toast.POSITION.BOTTOM_RIGHT,
+            className: 'foo-bar font-semibold text-sm dark:bg-gray-700',
             theme: window.localStorage?.getItem("theme") === "dark" ? 'dark' : null,
             autoClose: 3000,
             // transition:Zoom
@@ -15,7 +15,6 @@ export const toastSlice = createSlice({
     reducers: {
         toastOn: (state, action) => {
             const { type, message } = action.payload
-            // console.log(type)
             // const notify = () => {
             if (type === "success") {
                 toast.success(message, state.toastDefault)
@@ -29,5 +28,3 @@ export const toastSlice = createSlice({
 })
 
 export const { toastOn } = toastSlice.actions
-
-// export default authSlice.reducer

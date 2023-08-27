@@ -121,7 +121,7 @@ const FieldParam = ({ field, errors, touched, values, setValues, handleChange })
                         type={field.type}
                         name={field.name}
                         id={field.name}
-                        className="form-checkbox outline-none h-6 w-6 rounded dark:accent-pink-500 accent-indigo-500 bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                        className="form-checkbox outline-none dark:accent-pink-500 accent-yellow-500 h-6 w-6 rounded bg-gray-50 focus:ring-3 focus:ring-yellow-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 text-yellow-600"
                     />
                     <span className="m-2 text-sm font-semibold text-gray-900 dark:text-white">
                         {field.label}
@@ -220,7 +220,7 @@ const Checkboxes = ({
                                     type='checkbox'
                                     name={field.name}
                                     id={item.nombre}
-                                    className="form-checkbox outline-none dark:accent-pink-500 accent-indigo-500 h-6 w-6 rounded bg-gray-50 focus:ring-3 focus:ring-yellow-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 text-yellow-600"
+                                    className="form-checkbox outline-none dark:accent-pink-500 accent-yellow-500 h-6 w-6 rounded bg-gray-50 focus:ring-3 focus:ring-yellow-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 text-yellow-600"
                                     value={item.id + ""}
                                     disabled={item?.permanent}
                                 />
@@ -384,7 +384,6 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
                         as="select"
                         name={field.sub_name}
                         required={field.required}
-                        // onChange={(e) => console.log(e.target.value)}
                         className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                         <option value=''>...</option>

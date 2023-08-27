@@ -1,41 +1,38 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { HistorialDeSesiones } from './historial_de_sesiones'
 import { Users } from './users'
 import { HistorialDeCambios } from './historial_de_cambios'
 import { Roles } from './roles'
 import { Productos } from './productos'
 import { Almacenes } from './almacenes'
-// import { Usuarios } from '../menus/Usuarios'
-// import { Roles } from '../menus/Roles'
-// import { Menus } from '../menus/Menu'
+import { useParams } from 'react-router-dom'
 
 export const Menu = () => {
-    const currentMenu = useSelector(state => state.login.currentMenu)
+    const params = useParams()
     return (
         <>
             {
-                currentMenu?.nombre === "usuarios" &&
+                params.menuname === 'usuarios' &&
                 <Users />
             }
             {
-                currentMenu?.nombre === "roles" &&
+                params.menuname === 'roles' &&
                 <Roles />
             }
             {
-                currentMenu?.nombre === "productos" &&
+                params.menuname === 'productos' &&
                 <Productos />
             }
             {
-                currentMenu?.nombre === "almacenes" &&
+                params.menuname === 'almacenes' &&
                 <Almacenes />
             }
             {
-                currentMenu?.nombre === "historial-de-sesiones" &&
+                params.menuname === 'historial-de-sesiones' &&
                 <HistorialDeSesiones />
             }
             {
-                currentMenu?.nombre === "historial-de-cambios" &&
+                params.menuname === 'historial-de-cambios' &&
                 <HistorialDeCambios />
             }
         </>

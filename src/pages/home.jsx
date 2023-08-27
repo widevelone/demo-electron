@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { addCurrentMenu, addCurrentRol, loginOn } from '../store/slices/auth'
+import { loginOn } from '../store/slices/auth'
 
 
 export const Home = () => {
@@ -26,7 +26,6 @@ export const Home = () => {
           element.classList.add('dark')
           localStorage.setItem("theme", "dark")
         }
-        dispatch(addCurrentMenu(null))
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
     return (
@@ -42,12 +41,10 @@ export const Home = () => {
                             key={index}
                             className={`flex justify-center transition ease-in-out border rounded-lg dark:border-gray-700 border-gray-200 ${rol.nombre === currentRol?.nombre ? 'dark:bg-gray-600 bg-yellow-200' : 'bg-gray-50 dark:bg-gray-800'} dark:hover:bg-gray-700 hover:bg-yellow-300 dark:hover:border-gray-700 hover:border-yellow-200`}
                             to={`rol/${rol.nombre}`}
-                            onClick={() => dispatch(addCurrentRol(rol))}
                         >
                             <div className="flex flex-col items-center py-4 px-3 gap-2 text-center">
                                 <i className="fa-solid fa-user-tag text-[80px] text-gray-400"></i>
                                 <h5 className="mb-1 text-lg font-medium text-gray-900 dark:text-white">{rol.etiqueta}</h5>
-                                {/* <span className="text-sm text-gray-500 dark:text-gray-400">{rol.description}</span> */}
                             </div>
                         </Link>
                     ))

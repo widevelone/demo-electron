@@ -22,17 +22,12 @@ function App() {
         .then((response) => {
           dispatch(loginOn())
           dispatch(saveUserDetail(response.data))
-          // navigate("/")
-          // dispatch(toastOn({ type: "success", message: "Registro exitoso!" }))
-          // dispatch(saveToken(response.data.token))
-
         }
         )
-        .catch(error => {
+        .catch(() => {
           dispatch(loginOut())
           dispatch(removeToken())
           navigate("/login")
-          // dispatch(toastOn({ type: "danger", message: "Sesión expirada!" }))
           dispatch(saveUserDetail(null))
           localStorage.removeItem("token")
         })

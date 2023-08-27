@@ -5,8 +5,8 @@ export const authSlice = createSlice({
     initialState: {
         log: false,
         userDetail: null,
-        currentRol: null,
-        currentMenu: null
+        rols: [],
+        menus: []
     },
     reducers: {
         loginOn: (state) => {
@@ -15,33 +15,15 @@ export const authSlice = createSlice({
         loginOut: (state) => {
             state.log = false
         },
-        saveToken: (state, action) => {
+        saveToken: (_, action) => {
             localStorage.setItem("token", action.payload)
         },
-        removeToken: (state) => {
+        removeToken: () => {
             localStorage.removeItem("token")
         },
         saveUserDetail: (state, action) => {
             state.userDetail = action.payload
-        },
-        addCurrentRol: (state, action) => {
-            state.currentRol = action.payload
-            if (action.payload !== null) {
-                sessionStorage.setItem("currentRol", action.payload.nombre)
-            }
-            else {
-                sessionStorage.removeItem("currentRol")
-                sessionStorage.removeItem("currentMenu")
-            }
-        },
-        addCurrentMenu: (state, action) => {
-            state.currentMenu = action.payload
-            if (action.payload !== null) {
-                sessionStorage.setItem("currentMenu", action.payload.nombre)
-            }
-            else {
-                sessionStorage.removeItem("currentMenu")
-            }
+            state.rols = action.payload?.rols
         }
     },
 })
@@ -52,8 +34,4 @@ export const {
     saveToken,
     removeToken,
     saveUserDetail,
-    addCurrentRol,
-    addCurrentMenu
 } = authSlice.actions
-
-// export default authSlice.reducer

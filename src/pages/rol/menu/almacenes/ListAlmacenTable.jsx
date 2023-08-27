@@ -18,6 +18,7 @@ import { CreateValues, DeleteValues, UpdateValues } from '../../../../FormScheme
 export const ListAlmacenTable = () => {
     const {
         dispatch,
+        navigate,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -49,10 +50,6 @@ export const ListAlmacenTable = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
 
-    // useEffect(() => {
-    //     console.log(selecteds)
-    // }, [selecteds]);
-
     useEffect(() => {
         setSelectAllChecked(false)
         setIsChecked(false)
@@ -61,6 +58,10 @@ export const ListAlmacenTable = () => {
 
     const recall = () => {
         getDataPaginate()
+    }
+
+    const redirect = (id) => {
+        navigate(`productos/${id}`)
     }
     return (
         <Section>
@@ -149,6 +150,12 @@ export const ListAlmacenTable = () => {
                                     type: 'delete',
                                     icon: 'fa-trash',
                                     action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
+                                    reference: 'id'
+                                },
+                                {
+                                    type: 'other',
+                                    icon: 'fa-eye',
+                                    action: (data) => redirect(data.id),
                                     reference: 'id'
                                 }
                             ],

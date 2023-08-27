@@ -1,37 +1,30 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { addCurrentMenu } from '../store/slices/auth';
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-const useMenuHandling = (menuNameCurrent) => {
-    const params = useParams();
-    const dispatch = useDispatch();
-    const currentRol = useSelector(state => state.login.currentRol);
-    const currentMenu = useSelector(state => state.login.currentMenu);
-
-    const [menuName, setMenuName] = useState(params["*"]);
-    useEffect(() => {
-        if (params["*"] === menuNameCurrent) {
-            if (currentRol?.menus.find(r => r.nombre === menuNameCurrent)) {
-                dispatch(addCurrentMenu(currentRol?.menus.find(r => r.nombre === menuName)));
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+const useMenuHandling = () => {
+    const params = useParams()
+    const rols = useSelector(state => state.login.userDetail?.rols)
+    const [menus, setMenus] = useState([])
 
     useEffect(() => {
-        if (currentMenu.nombre != null && currentMenu.nombre !== params["*"]) {
-            if (currentRol?.menus.find(r => r.nombre === params["*"])) {
-                dispatch(addCurrentMenu(currentRol?.menus.find(r => r.nombre === params["*"])));
+        setMenus([])
+    }, [params.rolname])
+
+    useEffect(() => {
+        rols?.forEach(rol => {
+            if (rol.nombre === params.rolname) {
+                setMenus(rol.menus)
             }
-        }
-    })
+        })
+    }, [rols, params.rolname, params.menuname])
 
 
     return {
-        menuName,
-        setMenuName
-    };
-};
+        rols,
+        menus,
+        params
+    }
+}
 
-export default useMenuHandling;
+export default useMenuHandling
