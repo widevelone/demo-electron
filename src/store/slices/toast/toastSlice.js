@@ -6,7 +6,7 @@ export const toastSlice = createSlice({
     initialState: {
         toastDefault: {
             position: toast.POSITION.BOTTOM_RIGHT,
-            className: 'foo-bar font-semibold text-sm dark:bg-gray-700',
+            className: 'foo-bar font-semibold text-sm dark:bg-gray-700 dark:text-gray-50',
             theme: window.localStorage?.getItem("theme") === "dark" ? 'dark' : null,
             autoClose: 3000,
             // transition:Zoom

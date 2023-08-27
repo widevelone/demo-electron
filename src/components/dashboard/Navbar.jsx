@@ -2,6 +2,8 @@ import React from 'react'
 import logo from "../../assets/logo.png";
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { dropdownOff, dropdownToggle } from '../../store/slices/dropdown';
 
 export const Navbar = ({
     showSidebar,
@@ -10,9 +12,13 @@ export const Navbar = ({
     logout
 }) => {
     const params = useParams()
+    const dropdown = useSelector(state => state.dropdown.status)
+    const user = useSelector(state => state.login.userDetail)
+
+    const dispatch = useDispatch()
     return (
         <nav className="fixed top-0 z-20 w-full bg-yellow-500 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <div className="px-3 py-3 lg:px-5 lg:pl-3">
+            <div className="px-3 py-2.5 lg:px-5 lg:pl-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start">
                         <button
@@ -31,23 +37,58 @@ export const Navbar = ({
                         <Link to="/" className="flex ml-2 md:mr-24 items-center" onClick={() => setSidebar(window.innerWidth < 640 ? false : sidebar)}>
                             <img src={logo} className="self-center h-10 ml-2 mr-3" alt="widev" />
                             <div>
-                                <div className="self-center font-semibold text-sm whitespace-nowrap dark:text-white hidden sm:block">Soya Sari</div>
+                                <div className="self-center font-semibold text-xs whitespace-nowrap dark:text-white hidden sm:block p-0">Soya Sari</div>
                                 {
                                     params?.rolname &&
-                                    <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[2px] text-gray-100'>{params?.rolname?.toUpperCase()}</span></div>
+                                    <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[1.5px] text-gray-100'>{params?.rolname?.toUpperCase()}</span></div>
                                 }
                             </div>
                         </Link>
                     </div>
-                    <div className="flex items-center">
-                        <div className="flex items-center ml-3">
-                            <div>
-                                <button
-                                    onClick={logout}
-                                    className="bg-gray-700 hover:bg-yellow-700 text-gray-100 font-bold py-2 px-3 rounded"
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
+                        <button
+                            className="flex items-center text-sm font-medium dark:text-gray-200 px-1 rounded-full hover:dark:bg-gray-500 hover:text-gray-100 bg-gray-600 text-white"
+                            type="button"
+                            onClick={() => {
+                                dispatch(dropdownToggle())
+                            }}
+                        >
+                            <i className='fa-solid fa-user-circle text-2xl'></i>
+                        </button>
+                        <div
+                            className={`${dropdown ? '' : 'hidden'} absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 right-3`}
+                        >
+                            <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                                <div className="font-semibold">{user?.nombres}</div>
+                                <div className="text-gray-600 dark:text-gray-300">{user?.codigo}</div>
+                            </div>
+                            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
+                                <li>
+                                    <Link
+                                        to="settings"
+                                        className="block px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onClick={() => {
+                                            dispatch(dropdownOff())
+                                        }}
+                                    >
+                                        <i className='fa-solid fa-gear ml-2'></i> Configuración
+                                    </Link>
+                                </li>
+                            </ul>
+                            <div className="py-2">
+                                <span
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white cursor-pointer"
+                                    onClick={e => {
+                                        logout()
+                                        dispatch(dropdownOff())
+                                    }}
                                 >
-                                    <i className="fa-solid fa-right-from-bracket"></i>
-                                </button>
+                                    <i className="fa-solid fa-right-from-bracket"></i> Salir
+                                </span>
                             </div>
                         </div>
                     </div>

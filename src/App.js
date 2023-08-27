@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { AppRouter } from "./router/AppRouter";
 import { requestAuth } from "./http/httpRequest";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginOn, loginOut, removeToken, saveUserDetail } from "./store/slices/auth";
 import { ToastContainer } from "react-toastify";
+import { dropdownOff } from "./store/slices/dropdown";
 
 function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const dropdown = useSelector(state => state.dropdown.status)
   const element = document.documentElement
 
   const auth = async () => {
@@ -60,7 +62,9 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div>
+    <div
+      onClick={() => dropdown && dispatch(dropdownOff())}
+    >
       <AppRouter />
       <ToastContainer />
     </div>
