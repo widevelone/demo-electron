@@ -39,7 +39,7 @@ export const Home = () => {
                     userDetail.rols.map((rol, index) => (
                         <Link
                             key={index}
-                            className={`flex justify-center transition ease-in-out border rounded-lg dark:border-gray-700 border-gray-200 ${rol.nombre === currentRol?.nombre ? 'dark:bg-gray-600 bg-yellow-200' : 'bg-gray-50 dark:bg-gray-800'} dark:hover:bg-gray-700 hover:bg-yellow-300 dark:hover:border-gray-700 hover:border-yellow-200`}
+                            className={`flex justify-center transition ease-in-out border rounded-lg dark:border-gray-700 border-gray-200 ${rol.nombre === currentRol?.nombre ? 'dark:bg-gray-600 bg-gray-400' : 'bg-gray-50 dark:bg-gray-800'} dark:hover:bg-gray-700 hover:bg-gray-300 dark:hover:border-gray-700 hover:border-gray-200`}
                             to={`rol/${rol.nombre}`}
                         >
                             <div className="flex flex-col items-center py-4 px-3 gap-2 text-center">

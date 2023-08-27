@@ -50,7 +50,6 @@ const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecke
         } else if (head.boolean) {
             return <span className={`text-xs px-1.5 py-0.5 rounded ${badgeBooleanStyle(item[head.columns[0]])}`}>{badgeBooleanValue(item[head.columns[0]], head.boolenaOptions)}</span>
         } else {
-            // return <CellFormat global={head} data={item[head.columns[0]]} />;
             return <div>
                 {
                     head?.columns?.map((h, idw) => (
@@ -106,23 +105,7 @@ const CellFormat = ({ global, data }) => {
 };
 
 const TableRow = ({ headers, item, indexRow, selectAllChecked, checkList, selecteds, setSelecteds, isChecked, setIsChecked }) => {
-    // const rowClass = indexRow % 2 === 0 ? 'bg-white dark:bg-[rgba(55,65,81,.9)]' : 'bg-yellow-50 dark:bg-[rgba(55,65,81,.6)]'
-    const rowClass = indexRow % 2 === 0 ? 'bg-white dark:bg-[rgba(55,65,81,.9)]' : 'bg-yellow-50 dark:bg-[rgba(55,65,81,.6)]'
-    // const [isChecked, setIsChecked] = useState(false)
-
-    // const handleRowClick = () => {
-    //     setIsChecked(!isChecked)
-
-    //     if (!isChecked) {
-    //         setSelecteds(prevSelecteds => [...prevSelecteds, item])
-    //     } else {
-    //         setSelecteds(prevSelecteds => prevSelecteds.filter(selectedItem => selectedItem !== item))
-    //     }
-    // }
-
-    // const handleCheckboxChange = (event) => {
-    //     setIsChecked(event.target.checked)
-    // };
+    const rowClass = indexRow % 2 === 0 ? 'bg-white dark:bg-[rgba(55,65,81)]' : 'bg-yellow-50 dark:bg-[rgba(40,49,64)]'
 
     useEffect(() => {
         setIsChecked(selectAllChecked)
@@ -138,11 +121,10 @@ const TableRow = ({ headers, item, indexRow, selectAllChecked, checkList, select
     return (
         <tr
             className={`border-b dark:border-gray-700 border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 ${rowClass}`}
-        // onClick={() => setSelecteds(prevSelecteds => prevSelecteds.includes(item) ? prevSelecteds.filter(selectedItem => selectedItem !== item) : [...prevSelecteds, item])}
         >
             {
                 checkList &&
-                <td className="w-4 px-4 py-2">
+                <td className={`w-4 px-4 py-2 sticky left-0 bg-gray-300 dark:bg-[#414b5a]`}>
                     <div className="flex items-center">
                         <input
                             id={`checkbox-table-search-${indexRow}`}
@@ -196,7 +178,11 @@ const ActionButton = ({ type, action, data, icon, reference }) => {
 
 const ActionButtonsGroup = ({ actions, item }) => {
     return (
-        <div className='flex flex-row gap-2 justify-start'>
+        <div className='flex flex-row gap-2 justify-start'
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+        >
             {actions.map((action, index) => (
                 <ActionButton
                     key={index}
@@ -229,7 +215,7 @@ export const TableContainer = ({
                 <tr>
                     {
                         checkList &&
-                        <th scope="col" className="px-4 py-2 dark:bg-gray-800 bg-gray-600">
+                        <th scope="col" className={`px-4 py-2 dark:bg-gray-800 bg-gray-600 sticky left-0 `}>
                             <div className="flex items-center">
                                 <input
                                     id="checkbox-all-search"
@@ -268,7 +254,7 @@ export const TableContainer = ({
                             setSelecteds={setSelecteds}
                             isChecked={isChecked}
                             setIsChecked={setIsChecked}
-                            rowIndex={idx} // Pasa el índice de la fila al componente TableCell
+                            rowIndex={idx}
                         />
                     ))
                 }

@@ -12,7 +12,7 @@ export const Rol = () => {
             <Routes>
                 <Route path='/' element={
                     <ListMenus
-                        description={"demo"}
+                        description={`Lista de los menus disponibles:`}
                     />
                 } />
                 <Route

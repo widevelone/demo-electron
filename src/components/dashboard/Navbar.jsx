@@ -37,7 +37,7 @@ export const Navbar = ({
                         <Link to="/" className="flex ml-2 md:mr-24 items-center" onClick={() => setSidebar(window.innerWidth < 640 ? false : sidebar)}>
                             <img src={logo} className="self-center h-10 ml-2 mr-3" alt="widev" />
                             <div>
-                                <div className="self-center font-semibold text-xs whitespace-nowrap dark:text-white hidden sm:block p-0">Soya Sari</div>
+                                <div className="self-center font-bold text-xs whitespace-nowrap dark:text-white hidden sm:block p-0">SOYA SARI</div>
                                 {
                                     params?.rolname &&
                                     <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[1.5px] text-gray-100'>{params?.rolname?.toUpperCase()}</span></div>
@@ -51,16 +51,16 @@ export const Navbar = ({
                         }}
                     >
                         <button
-                            className="flex items-center text-sm font-medium dark:text-gray-200 px-1 rounded-full hover:dark:bg-gray-500 hover:text-gray-100 bg-gray-600 text-white"
+                            className="flex items-center dark:text-gray-200 hover:dark:text-gray-300 hover:text-gray-600 text-gray-700"
                             type="button"
                             onClick={() => {
                                 dispatch(dropdownToggle())
                             }}
                         >
-                            <i className='fa-solid fa-user-circle text-2xl'></i>
+                            <i className='fa-solid fa-user-circle text-3xl'></i>
                         </button>
                         <div
-                            className={`${dropdown ? '' : 'hidden'} absolute z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 right-3`}
+                            className={`${dropdown ? '' : 'hidden'} absolute z-10 bg-white divide-y  divide-gray-300 rounded-lg shadow-xl w-44 dark:bg-gray-700 dark:divide-gray-600 right-3`}
                         >
                             <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                                 <div className="font-semibold">{user?.nombres}</div>
@@ -69,8 +69,19 @@ export const Navbar = ({
                             <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
                                 <li>
                                     <Link
+                                        to="profile"
+                                        className="block px-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        onClick={() => {
+                                            dispatch(dropdownOff())
+                                        }}
+                                    >
+                                        <i className='fa-solid fa-user ml-2'></i> Mi perfíl
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
                                         to="settings"
-                                        className="block px-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        className="block px-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
                                         onClick={() => {
                                             dispatch(dropdownOff())
                                         }}
@@ -79,15 +90,19 @@ export const Navbar = ({
                                     </Link>
                                 </li>
                             </ul>
-                            <div className="py-2">
+                            <div className="">
                                 <span
-                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white cursor-pointer"
-                                    onClick={e => {
-                                        logout()
-                                        dispatch(dropdownOff())
-                                    }}
+                                    className="block px-2 py-2 text-right"
                                 >
-                                    <i className="fa-solid fa-right-from-bracket"></i> Salir
+                                    <button
+                                        className="px-3 py-2 text-sm cursor-pointer rounded-md dark:bg-red-700  dark:text-gray-200  dark:hover:bg-red-800 bg-red-600  text-gray-100  hover:shadow-md dark:hover:shadow-gray-800 hover:shadow-gray-400"
+                                        onClick={() => {
+                                            logout()
+                                            dispatch(dropdownOff())
+                                        }}
+                                    >
+                                        Salir <i className="fa-solid fa-right-from-bracket"></i>
+                                    </button>
                                 </span>
                             </div>
                         </div>
