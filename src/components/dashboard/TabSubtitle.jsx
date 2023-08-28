@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-export const SubtitleRol = () => {
+export const TabSubtitle = () => {
     const location = useLocation();
     const [tab, setTab] = useState({});
     const [partial, setPartial] = useState([]);
@@ -40,23 +40,35 @@ export const SubtitleRol = () => {
     return (
         <div className="mb-2">
             <Link
-                className='dark:text-gray-200 font-semibold text-md'
                 to={`/rol/${tab?.nombrerol}`}
             >
-                {' / ' + (tab?.etiquetarol || '')}
+                <TabSlash
+                    val={tab?.etiquetarol}
+                />
             </Link>
             <Link
-                className='dark:text-gray-200 font-semibold text-md'
                 to={`/rol/${tab?.nombrerol}/menu/${tab?.nombremenu}`}
             >
-                {tab?.etiquetamenu ? (' / ' + tab?.etiquetamenu) : ''}
+                <TabSlash
+                    val={tab?.etiquetamenu}
+                />
             </Link>
             <Link
-                className='dark:text-gray-200 font-semibold text-md'
                 to={`/rol/${tab?.nombrerol}/menu/${tab?.nombremenu}/${partial[4]}/${partial[5]}`}
             >
-                {partial[5] ? (' / ' + partial[5]) : ''}
+                <TabSlash
+                    val={partial[5]}
+                />
             </Link>
         </div>
     );
+}
+
+const TabSlash = ({ val }) => {
+    return (
+        val &&
+        <span className='dark:text-gray-200 font-semibold text-md'>
+            <span className='text-yellow-600'> / </span> {val}
+        </span>
+    )
 }

@@ -34,6 +34,30 @@ export function requestAuth(method, url, data) {
   })
 }
 
+export async function requestDefaulAuth(
+  method,
+  url,
+  data,
+  setData,
+  dispatch
+  ) {
+  return axios({
+    method,
+    headers: {
+      Authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
+    url,
+    data,
+  })
+  .then((response) => {
+    setData(response.data)
+  }
+  )
+  .catch(error => {
+    dispatch(toastOn({ type: "danger", message: (`Error: ${error?.response?.data?.message || 'error desconocido!'}`) }))
+  })
+}
+
 export async function requestAuthPaginate(
   method,
   url,
@@ -42,7 +66,8 @@ export async function requestAuthPaginate(
   setData,
   setStateData,
   setPaginate,
-  dispatch
+  dispatch,
+  errorRedirect
 ) {
   setStateData('loading')
   let dateFilter = ''

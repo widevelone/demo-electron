@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { dropdownOff, dropdownToggle } from '../../store/slices/dropdown';
+import useThemeHandling from '../../hooks/useThemeHandling';
 
 export const Navbar = ({
     showSidebar,
@@ -16,6 +17,11 @@ export const Navbar = ({
     const user = useSelector(state => state.login.userDetail)
 
     const dispatch = useDispatch()
+
+    const {
+        // theme,
+        toggleTheme
+    } = useThemeHandling()
     return (
         <nav className="fixed top-0 z-20 w-full bg-yellow-500 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <div className="px-3 py-2.5 lg:px-5 lg:pl-3">
@@ -68,6 +74,8 @@ export const Navbar = ({
                             </div>
                             <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
                                 <li>
+                                </li>
+                                <li>
                                     <Link
                                         to="profile"
                                         className="block px-2 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -92,8 +100,16 @@ export const Navbar = ({
                             </ul>
                             <div className="">
                                 <span
-                                    className="block px-2 py-2 text-right"
+                                    className="flex px-2 py-2 justify-between"
                                 >
+                                    <button
+                                        className="px-3 py-2 text-sm cursor-pointer rounded-md dark:bg-gray-800  dark:text-gray-200  dark:hover:bg-gray-900 bg-gray-200 hover:shadow-md dark:hover:shadow-gray-800 hover:shadow-gray-400"
+                                        onClick={() => {
+                                            toggleTheme()
+                                        }}
+                                    >
+                                        <i className="fa-solid fa-moon"></i>
+                                    </button>
                                     <button
                                         className="px-3 py-2 text-sm cursor-pointer rounded-md dark:bg-red-700  dark:text-gray-200  dark:hover:bg-red-800 bg-red-600  text-gray-100  hover:shadow-md dark:hover:shadow-gray-800 hover:shadow-gray-400"
                                         onClick={() => {

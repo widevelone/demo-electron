@@ -1,20 +1,7 @@
 import React, { useEffect } from 'react'
-import { requestAuthPaginate } from '../../../../http/httpRequest'
-import { TableContainer } from '../../../../components/table/TableContainer'
-import { formatDateWithTime } from '../../../../utils/dateFormat'
-import { Paginator } from '../../../../components/table/Paginator'
-import { formatFilters } from '../../../../utils/defaulStates'
-import { Searcher } from '../../../../components/form/Searcher'
-import { FilterSelect } from '../../../../components/form/FilterSelect'
-import { RangeDate } from '../../../../components/datePicker/CustomDateRangePicker'
-import { Actions } from '../../../../components/form/actions'
-import { TableSection } from '../../../../components/table/TableSection'
-import { ActionSection } from '../../../../components/table/ActionSection'
-import { Section } from '../../../../components/table/Section'
-import { ModalForm } from '../../../../components/modals/ModalForm'
-import { CreateValues, UpdateValues } from '../../../../FormSchemes/UserScheme'
-import { UpdateValuesModal } from '../../../../FormSchemes/GeneralFunctions'
+
 import { useGeneralParams } from '../../../../hooks/useDataPaginate'
+import { CreateValues, UpdateValues } from '../../../../FormSchemes/UserScheme'
 
 export const ListUserTable = () => {
     const {
@@ -28,7 +15,22 @@ export const ListUserTable = () => {
         stateData, setStateData,
         createModal, setCreateModal,
         updateModal, setUpdateModal,
-        currentData, setCurrentData
+        currentData, setCurrentData,
+        // imports
+        requestAuthPaginate,
+        TableContainer,
+        formatDateWithTime,
+        Paginator,
+        formatFilters,
+        Searcher,
+        FilterSelect,
+        RangeDate,
+        Actions,
+        TableSection,
+        ActionSection,
+        Section,
+        ModalForm,
+        UpdateValuesModal,
     } = useGeneralParams('nombres')
 
     const getDataPaginate = async () => {

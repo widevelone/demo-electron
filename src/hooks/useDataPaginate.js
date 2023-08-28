@@ -2,11 +2,28 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { defaultPaginateParams } from "../utils/defaulStates";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+import { requestAuthPaginate } from '../http/httpRequest'
+import { TableContainer } from '../components/table/TableContainer'
+import { Paginator } from '../components/table/Paginator'
+import { formatFilters } from '../utils/defaulStates'
+import { formatDateWithTime } from '../utils/dateFormat'
+import { Searcher } from '../components/form/Searcher'
+import { FilterSelect } from '../components/form/FilterSelect'
+import { RangeDate } from '../components/datePicker/CustomDateRangePicker'
+import { Actions } from '../components/form/actions'
+import { TableSection } from '../components/table/TableSection'
+import { ActionSection } from '../components/table/ActionSection'
+import { Section } from '../components/table/Section'
+import { ModalForm } from '../components/modals/ModalForm'
+import { UpdateValuesModal } from '../FormSchemes/GeneralFunctions'
 
 export const useGeneralParams = (defaultPaginate) => {
     const dispatch = useDispatch()
     const [data, setData] = useState([]);
     const navigate = useNavigate()
+    const params = useParams()
 
     const [paginate, setPaginate] = useState(defaultPaginateParams(defaultPaginate));
     const [selectedDay, setSelectedDay] = useState();
@@ -26,6 +43,7 @@ export const useGeneralParams = (defaultPaginate) => {
     return {
         dispatch,
         navigate,
+        params,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -37,5 +55,20 @@ export const useGeneralParams = (defaultPaginate) => {
         updateModal, setUpdateModal,
         deleteModal, setDeleteModal,
         currentData, setCurrentData,
+        // imports
+        requestAuthPaginate,
+        TableContainer,
+        formatDateWithTime,
+        Paginator,
+        formatFilters,
+        Searcher,
+        FilterSelect,
+        RangeDate,
+        Actions,
+        TableSection,
+        ActionSection,
+        Section,
+        ModalForm,
+        UpdateValuesModal,
     }
 }

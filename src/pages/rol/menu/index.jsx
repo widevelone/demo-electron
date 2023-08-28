@@ -6,6 +6,7 @@ import { Roles } from './roles'
 import { Productos } from './productos'
 import { Almacenes } from './almacenes'
 import { useParams } from 'react-router-dom'
+import { Estados } from './estados'
 
 export const Menu = () => {
     const params = useParams()
@@ -26,6 +27,10 @@ export const Menu = () => {
             {
                 params.menuname === 'almacenes' &&
                 <Almacenes />
+            }
+            {
+                params.menuname === 'estados' &&
+                <Estados />
             }
             {
                 params.menuname === 'historial-de-sesiones' &&

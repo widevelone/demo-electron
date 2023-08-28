@@ -1,19 +1,7 @@
 import React, { useEffect } from 'react'
-import { requestAuthPaginate } from '../../../../http/httpRequest'
-import { TableContainer } from '../../../../components/table/TableContainer'
-import { Paginator } from '../../../../components/table/Paginator'
-import { formatFilters } from '../../../../utils/defaulStates'
-import { Searcher } from '../../../../components/form/Searcher'
-import { FilterSelect } from '../../../../components/form/FilterSelect'
-import { RangeDate } from '../../../../components/datePicker/CustomDateRangePicker'
-import { Actions } from '../../../../components/form/actions'
-import { TableSection } from '../../../../components/table/TableSection'
-import { ActionSection } from '../../../../components/table/ActionSection'
-import { Section } from '../../../../components/table/Section'
-import { ModalForm } from '../../../../components/modals/ModalForm'
-import { CreateValues, DeleteValues, UpdateValues } from '../../../../FormSchemes/RolScheme'
-import { UpdateValuesModal } from '../../../../FormSchemes/GeneralFunctions'
+
 import { useGeneralParams } from '../../../../hooks/useDataPaginate'
+import { CreateValues, DeleteValues, UpdateValues } from '../../../../FormSchemes/RolScheme'
 
 export const ListRolTable = () => {
     const {
@@ -28,7 +16,21 @@ export const ListRolTable = () => {
         createModal, setCreateModal,
         updateModal, setUpdateModal,
         deleteModal, setDeleteModal,
-        currentData, setCurrentData
+        currentData, setCurrentData,
+        // imports
+        requestAuthPaginate,
+        TableContainer,
+        Paginator,
+        formatFilters,
+        Searcher,
+        FilterSelect,
+        RangeDate,
+        Actions,
+        TableSection,
+        ActionSection,
+        Section,
+        ModalForm,
+        UpdateValuesModal,
     } = useGeneralParams('nombre')
 
     const getDataPaginate = async () => {
@@ -56,7 +58,7 @@ export const ListRolTable = () => {
     useEffect(() => {
         setSelectAllChecked(false)
         setIsChecked(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
 
     const recall = () => {

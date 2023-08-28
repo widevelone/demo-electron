@@ -46,7 +46,7 @@ const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecke
                 )}
             </div>
         } else if (head.tag) {
-            return <span className={`text-xs mr-2 px-2.5 py-0.5 rounded ${badgeStaticFormatStyle(item[head.columns[0]])}`}>{item[head.columns[0]]}</span>
+            return <span className={`text-xs mr-2 px-2.5 py-0.5 tracking-wider font-bold rounded ${badgeStaticFormatStyle(item[head.columns[0]])}`}>{item[head.columns[0]]}</span>
         } else if (head.boolean) {
             return <span className={`text-xs px-1.5 py-0.5 rounded ${badgeBooleanStyle(item[head.columns[0]])}`}>{badgeBooleanValue(item[head.columns[0]], head.boolenaOptions)}</span>
         } else {
@@ -162,6 +162,8 @@ const ActionButton = ({ type, action, data, icon, reference }) => {
             return 'yellow';
         } else if (type === 'delete') {
             return 'red';
+        } else if (type === 'view') {
+            return 'cyan';
         }
         return '';
     };

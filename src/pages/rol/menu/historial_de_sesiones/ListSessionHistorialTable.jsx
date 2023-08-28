@@ -1,15 +1,5 @@
 import React, { useEffect } from 'react'
-import { requestAuthPaginate } from '../../../../http/httpRequest'
-import { TableContainer } from '../../../../components/table/TableContainer'
-import { formatDateWithTime } from '../../../../utils/dateFormat'
-import { Paginator } from '../../../../components/table/Paginator'
-import { formatFilters } from '../../../../utils/defaulStates'
-import { Searcher } from '../../../../components/form/Searcher'
-import { FilterSelect } from '../../../../components/form/FilterSelect'
-import { RangeDate } from '../../../../components/datePicker/CustomDateRangePicker'
-import { TableSection } from '../../../../components/table/TableSection'
-import { Section } from '../../../../components/table/Section'
-import { ActionSection } from '../../../../components/table/ActionSection'
+
 import { useGeneralParams } from '../../../../hooks/useDataPaginate'
 
 
@@ -22,7 +12,19 @@ export const ListSessionHistorialTable = () => {
         selecteds, setSelecteds,
         selectAllChecked, setSelectAllChecked,
         isChecked, setIsChecked,
-        stateData, setStateData
+        stateData, setStateData,
+        // imports
+        requestAuthPaginate,
+        TableContainer,
+        formatDateWithTime,
+        Paginator,
+        formatFilters,
+        Searcher,
+        FilterSelect,
+        RangeDate,
+        TableSection,
+        ActionSection,
+        Section,
     } = useGeneralParams('nombres')
 
     const getDataPaginate = async () => {

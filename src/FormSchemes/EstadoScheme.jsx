@@ -1,19 +1,12 @@
 import * as Yup from 'yup';
 
 export const UpdateValues = (data) => {
-    let estados = []
-    data?.estados?.forEach(estado => {
-        estados.push(estado.id + "")
-    });
     return {
         initialValues: {
             id: data?.id || '',
             nombre: data?.nombre || '',
             descripcion: data?.descripcion || '',
-            precio: data?.precio || 0,
-            retornable: data?.retornable || false,
-            capacidad: data?.capacidad || '',
-            estados: estados,
+            tags: data?.tags || ''
         },
         fieldsValidation: Yup.object().shape({
             nombre: Yup.string()
@@ -34,35 +27,17 @@ export const UpdateValues = (data) => {
                 label: "Descripción",
                 name: "descripcion",
                 type: "text",
-                required: false,
+                required: true,
                 placeholder: 'Descripción...',
+                autoFocus: true
             },
             {
-                label: "Precio estandar",
-                name: "precio",
-                type: "groupnumber",
-                subData: 'Bs.',
-                required: false,
-                placeholder: 'Nombre...',
-            },
-            {
-                label: "Capacidad",
-                name: "capacidad",
+                label: "Categorías",
+                name: "tags",
                 type: "text",
-                required: false,
-                placeholder: 'Capacidad...',
-            },
-            {
-                label: "¿Envase Retornable?",
-                name: "retornable",
-                type: "checkbox",
-            },
-            {
-                label: "Asignar estados para el producto",
-                name: "estados",
-                type: "checkboxes",
-                required: false,
-                urlApi: "/estados",
+                required: true,
+                placeholder: 'categorías...',
+                autoFocus: true
             },
         ]
     }
@@ -71,12 +46,10 @@ export const UpdateValues = (data) => {
 export const CreateValues = () => {
     return {
         initialValues: {
+            id: '',
             nombre: '',
             descripcion: '',
-            precio: 0,
-            retornable: false,
-            capacidad: '',
-            estados:[]
+            tags: ''
         },
         fieldsValidation: Yup.object().shape({
             nombre: Yup.string()
@@ -97,35 +70,17 @@ export const CreateValues = () => {
                 label: "Descripción",
                 name: "descripcion",
                 type: "text",
-                required: false,
+                required: true,
                 placeholder: 'Descripción...',
+                autoFocus: true
             },
             {
-                label: "Precio estandar",
-                name: "precio",
-                type: "groupnumber",
-                subData: 'Bs.',
-                required: false,
-                placeholder: 'Nombre...',
-            },
-            {
-                label: "Capacidad",
-                name: "capacidad",
+                label: "Categorías",
+                name: "tags",
                 type: "text",
-                required: false,
-                placeholder: 'Capacidad...',
-            },
-            {
-                label: "¿Envase Retornable?",
-                name: "retornable",
-                type: "checkbox",
-            },
-            {
-                label: "Asignar estados para el producto",
-                name: "estados",
-                type: "checkboxes",
-                required: false,
-                urlApi: "/estados",
+                required: true,
+                placeholder: 'categorías...',
+                autoFocus: true
             },
         ]
     }

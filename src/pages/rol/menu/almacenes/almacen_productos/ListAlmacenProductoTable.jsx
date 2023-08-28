@@ -1,24 +1,11 @@
 import React, { useEffect } from 'react'
-// import { requestAuthPaginate } from '../../../../http/httpRequest'
-// import { TableContainer } from '../../../../components/table/TableContainer'
-// import { Paginator } from '../../../../components/table/Paginator'
-// import { formatFilters } from '../../../../utils/defaulStates'
-// import { Searcher } from '../../../../components/form/Searcher'
-// import { FilterSelect } from '../../../../components/form/FilterSelect'
-// import { RangeDate } from '../../../../components/datePicker/CustomDateRangePicker'
-// import { Actions } from '../../../../components/form/actions'
-// import { TableSection } from '../../../../components/table/TableSection'
-// import { ActionSection } from '../../../../components/table/ActionSection'
-// import { Section } from '../../../../components/table/Section'
-// import { ModalForm } from '../../../../components/modals/ModalForm'
-// import { UpdateValuesModal } from '../../../../FormSchemes/GeneralFunctions'
-import { useGeneralParams } from '../../../../hooks/useDataPaginate'
-import { CreateValues, DeleteValues, UpdateValues } from '../../../../FormSchemes/AlmacenScheme'
+import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
+import { CreateValues, DeleteValues } from '../../../../../FormSchemes/AlmacenProductoScheme'
 
-export const ListAlmacenTable = () => {
+export const ListAlmacenProductoTable = () => {
     const {
         dispatch,
-        navigate,
+        params,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -27,7 +14,6 @@ export const ListAlmacenTable = () => {
         isChecked, setIsChecked,
         stateData, setStateData,
         createModal, setCreateModal,
-        updateModal, setUpdateModal,
         deleteModal, setDeleteModal,
         currentData, setCurrentData,
         // imports
@@ -49,7 +35,7 @@ export const ListAlmacenTable = () => {
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/almacens/pag`,
+            `/almacen/${params.almacen_id}/productos/pag`,
             null,
             paginate,
             setData,
@@ -62,21 +48,21 @@ export const ListAlmacenTable = () => {
         getDataPaginate();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
+    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters, params.almacen_id]);
 
     useEffect(() => {
         setSelectAllChecked(false)
         setIsChecked(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
 
     const recall = () => {
         getDataPaginate()
     }
 
-    const redirect = (id) => {
-        navigate(`productos/${id}`)
-    }
+    // const redirect = (id) => {
+    //     navigate(`productos/${id}`)
+    // }
     return (
         <Section>
             <ActionSection>
@@ -145,33 +131,38 @@ export const ListAlmacenTable = () => {
                 <TableContainer
                     headers={[
                         {
-                            label: 'Nombre',
-                            columns: ['nombre']
+                            label: 'Nombre del producto',
+                            columns: ['producto_nombre']
                         },
                         {
-                            label: 'Encargado',
-                            columns: ['nombres','apellido_paterno:apellido_materno']
+                            label: 'Estado del producto',
+                            columns: ['estado_nombre'],
+                            tag:true
+                        },
+                        {
+                            label: 'Total',
+                            columns: ['total']
                         },
                         {
                             label: 'Acciones',
                             actions: [
-                                {
-                                    type: 'view',
-                                    icon: 'fa-eye',
-                                    action: (data) => redirect(data.id),
-                                    reference: 'id'
-                                },
-                                {
-                                    type: 'edit',
-                                    icon: 'fa-edit',
-                                    action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
-                                },
+                                // {
+                                //     type: 'edit',
+                                //     icon: 'fa-edit',
+                                //     // action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
+                                // },
                                 {
                                     type: 'delete',
                                     icon: 'fa-trash',
                                     action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
                                     reference: 'id'
                                 },
+                                // {
+                                //     type: 'other',
+                                //     icon: 'fa-eye',
+                                //     // action: (data) => redirect(data.id),
+                                //     reference: 'id'
+                                // }
                             ],
                             // stickyR: true
                         },
@@ -196,14 +187,14 @@ export const ListAlmacenTable = () => {
                 <ModalForm
                     setModal={setCreateModal}
                     label="Crear almacén"
-                    dataValues={CreateValues()}
-                    urlApi={'/almacen'}
+                    dataValues={CreateValues(params?.almacen_id)}
+                    urlApi={`/almacen_producto`}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'
                 />
             }
-            {
+            {/*{
                 updateModal &&
                 <ModalForm
                     setModal={setUpdateModal}
@@ -214,14 +205,14 @@ export const ListAlmacenTable = () => {
                     call={recall}
                     buttonLabel='Editar'
                 />
-            }
+            }*/}
             {
                 deleteModal &&
                 <ModalForm
                     setModal={setDeleteModal}
-                    label="Eliminar almacén"
+                    label="Eliminar producto del almacén"
                     dataValues={DeleteValues(currentData)}
-                    urlApi={`/almacen/${currentData.id}`}
+                    urlApi={`/almacen_producto/${currentData.id}`}
                     method={'delete'}
                     call={recall}
                     buttonLabel='Eliminar'
