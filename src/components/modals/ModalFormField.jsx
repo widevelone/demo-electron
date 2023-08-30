@@ -179,6 +179,10 @@ const FieldParam = ({ field, errors, touched, values, setValues, handleChange })
             return (
                 <Checkboxes field={field} />
             )
+        case "radio":
+            return (
+                <RadioCheck field={field} />
+            )
         default:
             break;
     }
@@ -233,6 +237,58 @@ const Checkboxes = ({
                 }
             </div>
 
+        </div>
+    )
+}
+
+const RadioCheck = ({
+    field
+}) => {
+    const dispatch = useDispatch()
+    const [list, setList] = useState([]);
+    const getData = async () => {
+        await requestAuth(
+            'get',
+            field?.urlApi,
+            null
+        )
+            .then((response) => {
+                setList(response.data)
+            }
+            )
+            .catch(error => {
+                dispatch(toastOn({ type: "danger", message: error?.response?.data?.message || "error a listar las casillas." }))
+            })
+    }
+
+    useEffect(() => {
+        getData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    return (
+        <div className="col-start-1 col-end-13 dark:text-gray-100 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-500 rounded p-3" >
+            <div className='text-center text-sm font-bold pb-2'>{field.label}</div>
+            <div className="grid sm:grid-cols-3 gap-3">
+                {
+                    list?.map((item, index) => (
+                        <div key={index} className='select-none'>
+                            <label htmlFor={item.nombre} className="col-span-6 sm:col-span-2 p-2 rounded-lg dark:bg-gray-600 bg-gray-200 flex items-center border border-gray-300 dark:border-gray-500" >
+                                <Field
+                                    type='radio'
+                                    name={field.name}
+                                    id={item.nombre}
+                                    className="form-checkbox outline-none dark:accent-pink-500 accent-yellow-500 h-6 w-6 rounded bg-gray-50 focus:ring-3 focus:ring-yellow-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 text-yellow-600"
+                                    value={item.id + ""}
+                                    disabled={item?.permanent}
+                                />
+                                <span className="m-2 text-sm font-semibold text-gray-900 dark:text-white">
+                                    {item.etiqueta}
+                                </span>
+                            </label>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     )
 }

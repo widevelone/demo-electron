@@ -49,7 +49,6 @@ export const CreateValues = () => {
             id: '',
             nombre: '',
             descripcion: '',
-            tags: ''
         },
         fieldsValidation: Yup.object().shape({
             nombre: Yup.string()
@@ -76,11 +75,10 @@ export const CreateValues = () => {
             },
             {
                 label: "Categorías",
-                name: "tags",
-                type: "text",
+                name: "categoria_id",
+                type: "radio",
                 required: true,
-                placeholder: 'categorías...',
-                autoFocus: true
+                urlApi: "/categorias",
             },
         ]
     }

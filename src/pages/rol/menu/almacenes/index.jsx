@@ -8,8 +8,8 @@ import { ErrorPage } from '../../../error/errorPage';
 export const Almacenes = () => {
     return (
         // <div className='grid xl:grid-cols-1 gap-4 divide-y-2 divide-gray-600'>
-        <div className='grid grid-cols-1 xl:grid-cols-2 gap-y-4'>
-            <div className='col-span-2'>
+        <div className='grid grid-cols-1 xl:grid-cols-2 gap-2'>
+            <div className='col-span-2 xl:col-span-1'>
             <ListAlmacenTable />
             </div>
             <Routes>
@@ -17,7 +17,7 @@ export const Almacenes = () => {
                         null
                     } />
                     <Route
-                        path={`/productos/:almacen_id`}
+                        path={`/productos/:almacen_id/*`}
                         element={<AlmacenProductos />}
                     />
                     <Route path='*' element={<ErrorPage />} />

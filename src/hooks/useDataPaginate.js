@@ -59,7 +59,10 @@ export const useGeneralParams = (defaultPaginate) => {
         requestAuthPaginate,
         TableContainer,
         formatDateWithTime,
-        Paginator,
+        Paginator: <Paginator
+            paginate={paginate}
+            setPaginate={setPaginate}
+        />,
         formatFilters,
         Searcher,
         FilterSelect,

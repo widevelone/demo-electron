@@ -16,9 +16,9 @@ export const LoaderTable = ({
             </div>
             :
             stateData === 'empty' ?
-                <div className='text-sm opacity-80 w-full bg-white dark:bg-gray-700'>
-                    <div role="status" className='py-4 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-400 text-center'>
-                        Lista vacia!
+                <div className='opacity-80'>
+                    <div role="status" className='flex justify-center gap-2 items-center py-4 text-gray-800 dark:text-gray-300 text-center'>
+                        <i className='fa-solid fa-table text-2xl' /><span>Lista vacia!</span>
                     </div>
                 </div>
                 :

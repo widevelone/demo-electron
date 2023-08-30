@@ -129,6 +129,7 @@ export const ListEstadoTable = () => {
             </ActionSection>
             <TableSection
                 stateData={stateData}
+                paginator={Paginator}
             >
                 <TableContainer
                     headers={[
@@ -141,8 +142,9 @@ export const ListEstadoTable = () => {
                             columns: ['descripcion']
                         },
                         {
-                            label: 'Categorías',
-                            columns: ['tags']
+                            label: 'Categoría',
+                            columns: ['categoria_nombre'],
+                            tag:true
                         },
                         {
                             label: 'Acciones',
@@ -173,10 +175,6 @@ export const ListEstadoTable = () => {
                     stateData={stateData}
                 />
             </TableSection>
-            <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            />
             {
                 createModal &&
                 <ModalForm

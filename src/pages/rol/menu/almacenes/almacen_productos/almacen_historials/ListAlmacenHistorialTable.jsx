@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react'
+import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
+import { CreateValues, DeleteValues } from '../../../../../../FormSchemes/AlmacenHistorialScheme'
+import { formatDateWithTime } from '../../../../../../utils/dateFormat'
+// import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
+// import { CreateValues, DeleteValues } from '../../../../../FormSchemes/AlmacenProductoScheme'
 
-import { useGeneralParams } from '../../../../hooks/useDataPaginate'
-import { CreateValues, UpdateValues } from '../../../../FormSchemes/UserScheme'
-
-export const ListUserTable = () => {
+export const ListAlmacenHistorialTable = ({
+    reload,
+    setReload
+}) => {
     const {
         dispatch,
+        params,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -14,12 +20,11 @@ export const ListUserTable = () => {
         isChecked, setIsChecked,
         stateData, setStateData,
         createModal, setCreateModal,
-        updateModal, setUpdateModal,
+        deleteModal, setDeleteModal,
         currentData, setCurrentData,
         // imports
         requestAuthPaginate,
         TableContainer,
-        formatDateWithTime,
         Paginator,
         formatFilters,
         Searcher,
@@ -31,12 +36,12 @@ export const ListUserTable = () => {
         Section,
         ModalForm,
         UpdateValuesModal,
-    } = useGeneralParams('nombres')
+    } = useGeneralParams('nombre')
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/users/pag`,
+            `/almacen_producto/${params.almacen_producto_estado_id}/historials/pag`,
             null,
             paginate,
             setData,
@@ -47,12 +52,9 @@ export const ListUserTable = () => {
     }
     useEffect(() => {
         getDataPaginate();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
 
-    // useEffect(() => {
-    //     console.log(selecteds)
-    // }, [selecteds]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters, params.almacen_producto_estado_id]);
 
     useEffect(() => {
         setSelectAllChecked(false)
@@ -62,7 +64,12 @@ export const ListUserTable = () => {
 
     const recall = () => {
         getDataPaginate()
+        setReload(!reload)
     }
+
+    // const redirect = (id) => {
+    //     navigate(`productos/${id}`)
+    // }
     return (
         <Section>
             <ActionSection>
@@ -88,7 +95,7 @@ export const ListUserTable = () => {
                     options={[
                         {
                             label: "Nombre",
-                            value: "nombres"
+                            value: "nombre"
                         },
                         {
                             label: "Código",
@@ -132,24 +139,26 @@ export const ListUserTable = () => {
                 <TableContainer
                     headers={[
                         {
-                            label: 'Código',
-                            columns: ['codigo']
+                            label: 'Responsable',
+                            columns: ['user_nombres', 'user_apellido_paterno:user_apellido_materno']
                         },
                         {
-                            label: 'Nombre',
-                            columns: ['nombres', 'apellido_paterno:apellido_materno'],
-                            icon: 'fa-solid fa-user-circle text-lg',
-                            className: 'flex items-center',
-                            tag: true
-                            // stickyL: true
-                        },
-                        {
-                            label: 'Estado',
-                            columns: ['estado'],
+                            label: 'Cantidad',
+                            columns: ['cantidad'],
                             tag: true
                         },
                         {
-                            label: 'Fecha de creación',
+                            label: 'ingreso / egreso',
+                            columns: ['ingreso'],
+                            booleanState: true,
+                            booleanOptions: ['ingreso', 'egreso']
+                        },
+                        {
+                            label: 'Código de transacción',
+                            columns: ['transaccion_id'],
+                        },
+                        {
+                            label: 'Fecha de registro',
                             columns: ['createdAt'],
                             transform: true,
                             func: formatDateWithTime
@@ -157,17 +166,23 @@ export const ListUserTable = () => {
                         {
                             label: 'Acciones',
                             actions: [
-                                {
-                                    type: 'edit',
-                                    icon: 'fa-edit',
-                                    action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
-                                },
+                                // {
+                                //     type: 'edit',
+                                //     icon: 'fa-edit',
+                                //     // action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
+                                // },
                                 {
                                     type: 'delete',
                                     icon: 'fa-trash',
-                                    // action: (id) => deleteUser(id),
+                                    action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
                                     reference: 'id'
-                                }
+                                },
+                                // {
+                                //     type: 'other',
+                                //     icon: 'fa-eye',
+                                //     // action: (data) => redirect(data.id),
+                                //     reference: 'id'
+                                // }
                             ],
                             // stickyR: true
                         },
@@ -187,24 +202,24 @@ export const ListUserTable = () => {
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Crear usuario"
-                    dataValues={CreateValues()}
-                    urlApi={'/user'}
+                    label="Crear movimiento"
+                    dataValues={CreateValues(params?.almacen_producto_estado_id)}
+                    urlApi={`/almacen_historial`}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'
                 />
             }
             {
-                updateModal &&
+                deleteModal &&
                 <ModalForm
-                    setModal={setUpdateModal}
-                    label="Editar usuario"
-                    dataValues={UpdateValues(currentData)}
-                    urlApi={'/user'}
-                    method={'put'}
+                    setModal={setDeleteModal}
+                    label="Eliminar movimiento del almacén"
+                    dataValues={DeleteValues(currentData)}
+                    urlApi={`/almacen_historial/${currentData.id}`}
+                    method={'delete'}
                     call={recall}
-                    buttonLabel='Registrar'
+                    buttonLabel='Eliminar'
                 />
             }
         </Section>

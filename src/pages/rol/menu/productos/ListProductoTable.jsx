@@ -128,6 +128,7 @@ export const ListProductoTable = () => {
             </ActionSection>
             <TableSection
                 stateData={stateData}
+                paginator={Paginator}
             >
                 <TableContainer
                     headers={[
@@ -147,7 +148,7 @@ export const ListProductoTable = () => {
                             label: 'Retornable',
                             columns: ['retornable'],
                             boolean: true,
-                            boolenaOptions: []
+                            booleanOptions: []
                         },
                         {
                             label: 'Acciones',
@@ -178,10 +179,6 @@ export const ListProductoTable = () => {
                     stateData={stateData}
                 />
             </TableSection>
-            <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            />
             {
                 createModal &&
                 <ModalForm

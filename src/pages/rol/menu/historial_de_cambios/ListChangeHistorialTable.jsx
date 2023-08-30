@@ -109,6 +109,7 @@ export const ListChangeHistorialTable = () => {
             </ActionSection>
             <TableSection
                 stateData={stateData}
+                paginator={Paginator}
             >
                 <TableContainer
                     headers={[
@@ -147,10 +148,6 @@ export const ListChangeHistorialTable = () => {
                     stateData={stateData}
                 />
             </TableSection>
-            <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            />
         </Section>
     )
 }

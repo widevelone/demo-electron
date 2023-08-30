@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { badgeBooleanStyle, badgeBooleanValue, badgeStaticFormatStyle } from '../../utils/styleFormat';
+import { badgeBooleanStateValue, badgeBooleanStyle, badgeBooleanValue, badgeStaticFormatStyle } from '../../utils/styleFormat';
 
 const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecked, rowIndex, checkList, clickFunc }) => {
     const handleCheckboxChange = () => {
@@ -48,7 +48,9 @@ const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecke
         } else if (head.tag) {
             return <span className={`text-xs mr-2 px-2.5 py-0.5 tracking-wider font-bold rounded ${badgeStaticFormatStyle(item[head.columns[0]])}`}>{item[head.columns[0]]}</span>
         } else if (head.boolean) {
-            return <span className={`text-xs px-1.5 py-0.5 rounded ${badgeBooleanStyle(item[head.columns[0]])}`}>{badgeBooleanValue(item[head.columns[0]], head.boolenaOptions)}</span>
+            return <span className={`text-xs px-1.5 py-0.5 rounded ${badgeBooleanStyle(item[head.columns[0]])}`}>{badgeBooleanValue(item[head.columns[0]], head.booleanOptions)}</span>
+        } else if (head.booleanState) {
+            return <span className={`px-1.5 py-0.5 rounded ${badgeBooleanStyle(item[head.columns[0]])}`}>{badgeBooleanStateValue(item[head.columns[0]], head.booleanOptions)}</span>
         } else {
             return <div>
                 {

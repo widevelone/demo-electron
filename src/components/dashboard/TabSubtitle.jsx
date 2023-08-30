@@ -44,6 +44,7 @@ export const TabSubtitle = () => {
             >
                 <TabSlash
                     val={tab?.etiquetarol}
+                    validate={tab?.etiquetarol}
                 />
             </Link>
             <Link
@@ -51,6 +52,7 @@ export const TabSubtitle = () => {
             >
                 <TabSlash
                     val={tab?.etiquetamenu}
+                    validate={tab?.etiquetamenu}
                 />
             </Link>
             <Link
@@ -58,15 +60,24 @@ export const TabSubtitle = () => {
             >
                 <TabSlash
                     val={partial[5]}
+                    validate={partial[5]}
+                />
+            </Link>
+            <Link
+                to={`/rol/${tab?.nombrerol}/menu/${tab?.nombremenu}/${partial[4]}/${partial[5]}/${partial[6]}/${partial[7]}`}
+            >
+                <TabSlash
+                    val={`${partial[6]}`}
+                    validate={partial[7]}
                 />
             </Link>
         </div>
     );
 }
 
-const TabSlash = ({ val }) => {
+const TabSlash = ({ val, validate }) => {
     return (
-        val &&
+        validate &&
         <span className='dark:text-gray-200 font-semibold text-md'>
             <span className='text-yellow-600'> / </span> {val}
         </span>

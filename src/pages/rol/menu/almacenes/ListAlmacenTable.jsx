@@ -141,6 +141,7 @@ export const ListAlmacenTable = () => {
             </ActionSection>
             <TableSection
                 stateData={stateData}
+                paginator={Paginator}
             >
                 <TableContainer
                     headers={[
@@ -187,10 +188,6 @@ export const ListAlmacenTable = () => {
                     stateData={stateData}
                 />
             </TableSection>
-            <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            />
             {
                 createModal &&
                 <ModalForm

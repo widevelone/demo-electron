@@ -6,6 +6,7 @@ export const ListAlmacenProductoTable = () => {
     const {
         dispatch,
         params,
+        navigate,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -60,9 +61,9 @@ export const ListAlmacenProductoTable = () => {
         getDataPaginate()
     }
 
-    // const redirect = (id) => {
-    //     navigate(`productos/${id}`)
-    // }
+    const redirect = (id) => {
+        navigate(`historial/${id}`)
+    }
     return (
         <Section>
             <ActionSection>
@@ -91,8 +92,8 @@ export const ListAlmacenProductoTable = () => {
                             value: "nombre"
                         },
                         {
-                            label: "Código",
-                            value: "codigo"
+                            label: "Estado",
+                            value: "estado"
                         }
                     ]}
                 />
@@ -127,6 +128,7 @@ export const ListAlmacenProductoTable = () => {
             </ActionSection>
             <TableSection
                 stateData={stateData}
+                paginator={Paginator}
             >
                 <TableContainer
                     headers={[
@@ -152,17 +154,17 @@ export const ListAlmacenProductoTable = () => {
                                 //     // action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
                                 // },
                                 {
+                                    type: 'other',
+                                    icon: 'fa-eye',
+                                    action: (data) => redirect(data.id),
+                                    reference: 'id'
+                                },
+                                {
                                     type: 'delete',
                                     icon: 'fa-trash',
                                     action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
                                     reference: 'id'
                                 },
-                                // {
-                                //     type: 'other',
-                                //     icon: 'fa-eye',
-                                //     // action: (data) => redirect(data.id),
-                                //     reference: 'id'
-                                // }
                             ],
                             // stickyR: true
                         },
@@ -178,10 +180,10 @@ export const ListAlmacenProductoTable = () => {
                     stateData={stateData}
                 />
             </TableSection>
-            <Paginator
+            {/* <Paginator
                 paginate={paginate}
                 setPaginate={setPaginate}
-            />
+            /> */}
             {
                 createModal &&
                 <ModalForm

@@ -7,6 +7,7 @@ export function badgeStaticFormatStyle(value) {
         'cierre': 'bg-red-200 dark:bg-red-700 font-semibold',
         'activo': 'bg-green-200 dark:bg-green-700 font-semibold',
         'inactivo': 'bg-red-200 dark:bg-red-700 font-semibold',
+        'estado-de-productos': 'bg-yellow-200 dark:bg-yellow-800 font-semibold',
     };
     return TagsDictionary[value] ? TagsDictionary[value] : 'bg-gray-300 dark:bg-gray-800'
 }
@@ -26,5 +27,14 @@ export function badgeBooleanValue(value, options) {
     }
     else {
         return <span><i className="fa-solid fa-xmark text-sm" /> {options[1]}</span>
+    }
+}
+
+export function badgeBooleanStateValue(value, options) {
+    if (value) {
+        return <span><i className="fa-solid fa-add text-sm" /> {options[0]}</span>
+    }
+    else {
+        return <span><i className="fa-solid fa-minus text-sm" /> {options[1]}</span>
     }
 }

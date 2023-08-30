@@ -128,6 +128,7 @@ export const ListRolTable = () => {
             </ActionSection>
             <TableSection
                 stateData={stateData}
+                paginator={Paginator}
             >
                 <TableContainer
                     headers={[
@@ -164,10 +165,6 @@ export const ListRolTable = () => {
                     stateData={stateData}
                 />
             </TableSection>
-            <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            />
             {
                 createModal &&
                 <ModalForm
