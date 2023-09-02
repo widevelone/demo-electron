@@ -32,6 +32,7 @@ export const UpdateValues = (data) => {
                 sub_name:'encargado_id',
                 sub_label: 'Seleccionar usuario',
                 sub_urlApi: "/departamento/{param}/users",
+                sub_optionDescription: 'etiqueta',
             },
         ]
     }
@@ -63,10 +64,12 @@ export const CreateValues = () => {
                 name: "departamento_id",
                 type: "doubleSelectApi",
                 required: false,
+                optionDescription: 'nombre',
                 urlApi: "/departamentos",
                 sub_name:'encargado_id',
                 sub_label: 'Seleccionar usuario',
                 sub_urlApi: "/departamento/{param}/users",
+                sub_optionDescription: 'etiqueta',
             },
         ]
     }

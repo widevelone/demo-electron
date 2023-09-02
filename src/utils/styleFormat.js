@@ -8,6 +8,7 @@ export function badgeStaticFormatStyle(value) {
         'activo': 'bg-green-200 dark:bg-green-700 font-semibold',
         'inactivo': 'bg-red-200 dark:bg-red-700 font-semibold',
         'estado-de-productos': 'bg-yellow-200 dark:bg-yellow-800 font-semibold',
+        'tipo-movimientos': 'bg-lightBlue-200 dark:bg-lightBlue-600 font-semibold',
     };
     return TagsDictionary[value] ? TagsDictionary[value] : 'bg-gray-300 dark:bg-gray-800'
 }

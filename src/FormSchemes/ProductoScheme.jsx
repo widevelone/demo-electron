@@ -62,7 +62,7 @@ export const UpdateValues = (data) => {
                 name: "estados",
                 type: "checkboxes",
                 required: false,
-                urlApi: "/estados/category/estado-de-producto",
+                urlApi: "/estados/categoria/estado-de-productos",
             },
         ]
     }
@@ -125,7 +125,7 @@ export const CreateValues = () => {
                 name: "estados",
                 type: "checkboxes",
                 required: false,
-                urlApi: "/estados/category/estado-de-producto",
+                urlApi: "/estados/categoria/estado-de-productos",
             },
         ]
     }

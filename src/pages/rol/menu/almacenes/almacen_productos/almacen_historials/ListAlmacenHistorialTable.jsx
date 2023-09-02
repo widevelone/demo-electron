@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
-import { CreateValues, DeleteValues } from '../../../../../../FormSchemes/AlmacenHistorialScheme'
+import { CreateValues, CreateValuesTraspaso, CreateValuesTraspasoExterno, DeleteValues } from '../../../../../../FormSchemes/AlmacenHistorialScheme'
 import { formatDateWithTime } from '../../../../../../utils/dateFormat'
 // import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
 // import { CreateValues, DeleteValues } from '../../../../../FormSchemes/AlmacenProductoScheme'
@@ -37,6 +37,9 @@ export const ListAlmacenHistorialTable = ({
         ModalForm,
         UpdateValuesModal,
     } = useGeneralParams('nombre')
+
+    const [modalTraspaso, setModalTraspaso] = useState(false);
+    const [modalTraspasoExterno, setModalTraspasoExterno] = useState(false);
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
@@ -82,8 +85,20 @@ export const ListAlmacenHistorialTable = ({
                         },
                         {
                             icon: 'add',
-                            label: 'Crear',
+                            label: 'Ingreso / Egreso',
                             action: () => setCreateModal(true)
+                        },
+                        {
+                            icon: 'add',
+                            label: 'Traspaso interno',
+                            action: () => setModalTraspaso(true),
+                            className: 'bg-lightBlue-400 dark:bg-lightBlue-600'
+                        },
+                        {
+                            icon: 'add',
+                            label: 'Traspaso a otro almacén',
+                            action: () => setModalTraspasoExterno(true),
+                            className: 'bg-green-400 dark:bg-green-700'
                         },
                     ]}
                 />
@@ -202,9 +217,33 @@ export const ListAlmacenHistorialTable = ({
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Crear movimiento"
+                    label="Ingreso simple"
                     dataValues={CreateValues(params?.almacen_producto_estado_id)}
                     urlApi={`/almacen_historial`}
+                    method={'post'}
+                    call={recall}
+                    buttonLabel='Registrar'
+                />
+            }
+            {
+                modalTraspaso &&
+                <ModalForm
+                    setModal={setModalTraspaso}
+                    label="Traspaso"
+                    dataValues={CreateValuesTraspaso(params?.almacen_producto_estado_id)}
+                    urlApi={`/almacen_historial_traspaso`}
+                    method={'post'}
+                    call={recall}
+                    buttonLabel='Registrar'
+                />
+            }
+            {
+                modalTraspasoExterno &&
+                <ModalForm
+                    setModal={setModalTraspasoExterno}
+                    label="Traspaso"
+                    dataValues={CreateValuesTraspasoExterno(params?.almacen_producto_estado_id)}
+                    urlApi={`/almacen_historial_traspaso`}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'

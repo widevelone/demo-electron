@@ -160,6 +160,7 @@ const FieldParam = ({ field, errors, touched, values, setValues, handleChange })
             return (
                 <SelectApi
                     field={field}
+                    handleChange={handleChange}
                     errors={errors}
                     touched={touched}
                 />
@@ -277,12 +278,12 @@ const RadioCheck = ({
                                     type='radio'
                                     name={field.name}
                                     id={item.nombre}
-                                    className="form-checkbox outline-none dark:accent-pink-500 accent-yellow-500 h-6 w-6 rounded bg-gray-50 focus:ring-3 focus:ring-yellow-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 text-yellow-600"
+                                    className="form-checkbox outline-none dark:accent-pink-500 accent-yellow-500 h-6 w-6 rounded-full bg-gray-50 focus:ring-3 focus:ring-yellow-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 text-yellow-600"
                                     value={item.id + ""}
                                     disabled={item?.permanent}
                                 />
                                 <span className="m-2 text-sm font-semibold text-gray-900 dark:text-white">
-                                    {item.etiqueta}
+                                    {item.nombre}
                                 </span>
                             </label>
                         </div>
@@ -293,9 +294,10 @@ const RadioCheck = ({
     )
 }
 
-const SelectApi = ({ field, errors, touched }) => {
+const SelectApi = ({ field, handleChange, errors, touched }) => {
     const dispatch = useDispatch()
     const [list, setList] = useState([]);
+    const [extraData, setExtraData] = useState(null)
     const getData = async () => {
         await requestAuth(
             'get',
@@ -326,12 +328,16 @@ const SelectApi = ({ field, errors, touched }) => {
                 as="select"
                 name={field.name}
                 required={field.required}
-                className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-semibold"
+                onChange={(e) => {
+                    handleChange(e)
+                    setExtraData(list.find(l => (l.id + '') === e.target.value))
+                }}
             >
                 <option value=''>...</option>
                 {
                     list?.map((option, index) => (
-                        <option value={option?.id} key={index}>{option?.nombre}</option>
+                        <option value={option?.id} key={index}>{option[field.optionDescription]}</option>
                     ))
                 }
             </Field>
@@ -340,6 +346,21 @@ const SelectApi = ({ field, errors, touched }) => {
                 errors={errors}
                 touched={touched}
             />
+            {
+                field.infoTags && field.infoTags.length > 0 && extraData &&
+                <div className='space-y-1 gap-x-1 text-xs dark:bg-gray-800 bg-gray-200 p-1 rounded-b-lg dark:text-gray-400 text-gray-700'>
+                    {
+                        field.infoTags?.map((info, index) => (
+                            <div
+                                key={index}
+                                className="p-0 leading-none"
+                            >
+                                <span className='font-bold dark:text-gray-400 text-gray-600'>{info.label}:</span> <span className={`${info.mark ? 'dark:text-red-500 text-red-600 font-bold' : 'font-semibold dark:text-gray-300 text-gray-800'}`}>{extraData[info.data]}</span>
+                            </div>
+                        ))
+                    }
+                </div>
+            }
         </div>
     )
 }
@@ -348,6 +369,7 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
     const dispatch = useDispatch()
     const [list, setList] = useState([]);
     const [subList, setSubList] = useState([]);
+    const [extraData, setExtraData] = useState(null)
     const [called, setCalled] = useState(false);
     const getData = async () => {
         await requestAuth(
@@ -374,8 +396,7 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
     }, []);
 
     const definedSubList = async (value) => {
-        if (called)
-        {
+        if (called) {
             setValues(field.sub_name, '')
             setSubList([])
         }
@@ -412,13 +433,14 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
                     onChange={(e) => {
                         handleChange(e)
                         definedSubList(e.target.value)
+                        setExtraData(null)
                     }}
                     className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                     <option value=''>...</option>
                     {
                         list?.map((option, index) => (
-                            <option value={option?.id} key={index}>{option?.nombre}</option>
+                            <option value={option?.id} key={index}>{option[field.optionDescription]}</option>
                         ))
                     }
                 </Field>
@@ -429,32 +451,53 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
                 />
             </div>
             {
-                subList.length > 0 &&
-                < div className="col-span-6 sm:col-span-4 md:col-span-3" >
-                    <label htmlFor={field.sub_name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
-                        {field.sub_label}
-                        {field.required && <RequiredPick />}
-                    </label>
-                    <Field
-                        id={field.sub_name}
-                        as="select"
-                        name={field.sub_name}
-                        required={field.required}
-                        className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                        <option value=''>...</option>
+                // subList.length > 0 &&
+                <>
+                    < div className="col-span-6 sm:col-span-4 md:col-span-3" >
+                        <label htmlFor={field.sub_name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                            {field.sub_label}
+                            {field.required && <RequiredPick />}
+                        </label>
+                        <Field
+                            id={field.sub_name}
+                            as="select"
+                            name={field.sub_name}
+                            required={field.required}
+                            className="bg-gray-50 outline-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            onChange={(e) => {
+                                handleChange(e)
+                                setExtraData(subList.find(l => (l.id + '') === e.target.value))
+                            }}
+                        >
+                            <option value=''>...</option>
+                            {
+                                subList?.map((option, index) => (
+                                    <option value={option?.id} key={index}>{option[field.sub_optionDescription]}</option>
+                                ))
+                            }
+                        </Field>
+                        <ErrorLabel
+                            name={field.sub_name}
+                            errors={errors}
+                            touched={touched}
+                        />
                         {
-                            subList?.map((option, index) => (
-                                <option value={option?.id} key={index}>{option?.etiqueta}</option>
-                            ))
+                            field.sub_infoTags && field.sub_infoTags.length > 0 && extraData &&
+                            <div className='space-y-1 gap-x-1 text-xs dark:bg-gray-800 bg-gray-200 p-1 rounded-b-lg dark:text-gray-400 text-gray-700'>
+                                {
+                                    field.sub_infoTags?.map((info, index) => (
+                                        <div
+                                            key={index}
+                                            className="p-0 leading-none"
+                                        >
+                                            <span className='font-bold dark:text-gray-400 text-gray-600'>{info.label}:</span> <span className={`${info.mark ? 'dark:text-red-500 text-red-600 font-bold' : 'font-semibold dark:text-gray-300 text-gray-800'}`}>{extraData[info.data]}</span>
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         }
-                    </Field>
-                    <ErrorLabel
-                        name={field.sub_name}
-                        errors={errors}
-                        touched={touched}
-                    />
-                </div >
+                    </div >
+                </>
             }
         </>
     )

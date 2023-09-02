@@ -154,7 +154,7 @@ export const ListAlmacenProductoTable = () => {
                                 //     // action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
                                 // },
                                 {
-                                    type: 'other',
+                                    type: 'view',
                                     icon: 'fa-eye',
                                     action: (data) => redirect(data.id),
                                     reference: 'id'

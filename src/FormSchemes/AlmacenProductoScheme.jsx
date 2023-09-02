@@ -17,10 +17,12 @@ export const CreateValues = (almacen_id) => {
                 name: "producto_id",
                 type: "doubleSelectApi",
                 required: false,
+                optionDescription: 'nombre',
                 urlApi: "/productos",
                 sub_name: 'estado_id',
                 sub_label: 'Seleccione estado',
                 sub_urlApi: "/producto/{param}/estados",
+                sub_optionDescription: 'etiqueta',
             },
         ]
     }

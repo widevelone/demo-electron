@@ -119,6 +119,7 @@ export const UpdateValues = (data) => {
                 type: "selectApi",
                 required: true,
                 urlApi: "/departamentos",
+                optionDescription: "nombre",
             },
             {
                 label: "Contraseña",
@@ -240,6 +241,7 @@ export const CreateValues = () => {
                 type: "selectApi",
                 required: true,
                 urlApi: "/departamentos",
+                optionDescription: "nombre",
             },
             {
                 label: "Contraseña",

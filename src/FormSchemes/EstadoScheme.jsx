@@ -6,11 +6,11 @@ export const UpdateValues = (data) => {
             id: data?.id || '',
             nombre: data?.nombre || '',
             descripcion: data?.descripcion || '',
-            tags: data?.tags || ''
+            categoria_id: (data?.categoria_id+'') || ''
         },
         fieldsValidation: Yup.object().shape({
             nombre: Yup.string()
-                .min(4, 'Mínimo 4 caracteres!')
+                .min(3, 'Mínimo 3 caracteres!')
                 .max(50, 'Máximo 40 caracteres!')
                 .required('Campo requerido'),
         }),
@@ -32,12 +32,11 @@ export const UpdateValues = (data) => {
                 autoFocus: true
             },
             {
-                label: "Categorías",
-                name: "tags",
-                type: "text",
+                label: "Seleccione una categoría",
+                name: "categoria_id",
+                type: "radio",
                 required: true,
-                placeholder: 'categorías...',
-                autoFocus: true
+                urlApi: "/categorias",
             },
         ]
     }
@@ -49,10 +48,11 @@ export const CreateValues = () => {
             id: '',
             nombre: '',
             descripcion: '',
+            categoria_id: ''
         },
         fieldsValidation: Yup.object().shape({
             nombre: Yup.string()
-                .min(4, 'Mínimo 4 caracteres!')
+                .min(3, 'Mínimo 3 caracteres!')
                 .max(50, 'Máximo 40 caracteres!')
                 .required('Campo requerido'),
         }),
@@ -74,7 +74,7 @@ export const CreateValues = () => {
                 autoFocus: true
             },
             {
-                label: "Categorías",
+                label: "Seleccione una categoría",
                 name: "categoria_id",
                 type: "radio",
                 required: true,
