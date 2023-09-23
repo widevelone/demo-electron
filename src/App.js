@@ -1,50 +1,73 @@
 import React, { useEffect } from "react";
 import useClientesApi from "./server/clientes.api";
-import { requestApi } from "./server/requestApi";
+import { requestDefaultApi } from "./server/requestApi";
+import { Field, Form, Formik } from "formik";
 
 function App() {
   const {
     handleSubmit,
-    handleInputChange,
     handleEdit,
     handleDelete,
-    posts,
-    setPosts,
-    newPost,
-    editingPost,
-  } = useClientesApi()
+    data,
+    setData,
+  } = useClientesApi({ generalApi: 'clientes' })
 
   useEffect(() => {
-    requestApi(setPosts, 'posts')
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    requestDefaultApi('clientes', setData)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="App">
-      <h1>Posts</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Título"
-          value={newPost.title}
-          onChange={handleInputChange}
-        />
-        <textarea
-          name="body"
-          placeholder="Contenido"
-          value={newPost.body}
-          onChange={handleInputChange}
-        />
-        <button type="submit">{editingPost ? "Guardar" : "Crear"}</button>
-      </form>
+      <h1>Clientes</h1>
+      <Formik
+        initialValues={{
+          nombre: '',
+          descripcion: '',
+          telefono: '',
+        }}
+
+        onSubmit={async (values, { resetForm }) => {
+          handleSubmit('POST', 'clientes', values)
+          resetForm()
+        }}
+        onReset={() => console.log("reset")}
+      >
+        {() => (
+          <Form className="space-y-2 md:space-y-4">
+            <Field
+              type="text"
+              name="nombre"
+              placeholder="Código de usuario"
+              required={true}
+            />
+            <Field
+              type="text"
+              name="descripcion"
+              placeholder="Código de usuario"
+              required={true}
+            />
+            <Field
+              type="text"
+              name="telefono"
+              placeholder="Código de usuario"
+              required={true}
+            />
+
+            <button type="submit">guardar</button>
+          </Form>
+        )}
+      </Formik>
       <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <h2>{post.title}</h2>
-            <p>{post.body}</p>
-            <button onClick={() => handleEdit(post)}>Editar</button>
-            <button onClick={() => handleDelete(post.id)}>Eliminar</button>
+        {data.map((i) => (
+          <li key={i.id}>
+            <div>ID: <span className="font-bold">{i.id}</span></div>
+            <div>Codigo: <span className="font-bold">{i.codigo}</span></div>
+            <div>Nombre: <span className="font-bold">{i.nombre}</span></div>
+            <div>Descripcion: <span className="font-bold">{i.descripcion}</span></div>
+            <div>Telefono: <span className="font-bold">{i.telefono}</span></div>
+            <button onClick={() => handleEdit(i)}>Editar</button>
+            <button onClick={() => handleDelete('DELETE', `clientes/${i.id}`)}>Eliminar</button>
           </li>
         ))}
       </ul>
