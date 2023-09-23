@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.5.0",
     "concurrently": "^8.2.1",
     "electron": "^26.2.1",
     "electron-builder": "^24.6.4",
@@ -23,7 +24,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron-react": "concurrently \"set BROWSER=none && npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "tron": "concurrently \"set BROWSER=none && electron .\" \"npm run start\""
+    "tron": "concurrently \"set BROWSER=none && electron .\" \"npm run start\" \"json-server --watch db.json --port 3001\""
   },
   "eslintConfig": {
     "extends": [
