@@ -10,7 +10,8 @@ export const Input = ({
     required = false,
     label,
     errorMessage = null,
-    requiredLabel = false
+    requiredLabel = false,
+    autoFocus
 }) => {
     switch (type) {
         case 'checkbox':
@@ -40,6 +41,7 @@ export const Input = ({
                         className={className}
                         placeholder={placeholder}
                         required={required}
+                        autoFocus={autoFocus}
                     />
                     {errorMessage}
                 </div>

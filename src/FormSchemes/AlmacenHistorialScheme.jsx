@@ -144,8 +144,8 @@ export const CreateValuesTraspaso = (almacen_producto_estado_id) => {
                         data: 'estado_nombre'
                     },
                     {
-                        label: 'Total',
-                        data: 'total',
+                        label: 'Cantidad total',
+                        data: 'cantidad_total',
                         mark: true
                     },
                 ]
@@ -207,8 +207,8 @@ export const CreateValuesTraspasoExterno = (almacen_producto_estado_id) => {
                         data: 'estado_nombre'
                     },
                     {
-                        label: 'Total',
-                        data: 'total',
+                        label: 'Cantidad total',
+                        data: 'cantidad_total',
                         mark: true
                     },
                 ]

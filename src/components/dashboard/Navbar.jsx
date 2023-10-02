@@ -46,7 +46,7 @@ export const Navbar = ({
                                 <div className="self-center font-bold text-xs whitespace-nowrap dark:text-white hidden sm:block p-0">SOYA SARI</div>
                                 {
                                     params?.rolname &&
-                                    <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[1.5px] text-gray-100'>{params?.rolname?.toUpperCase()}</span></div>
+                                    <div className="self-center"><span className='font-bold text-xs dark:text-yellow-500 bg-gray-700 rounded-md px-2 py-[1.5px] text-gray-100'>{user?.rols?.find(u => u.nombre ===params?.rolname)?.etiqueta?.toUpperCase()}</span></div>
                                 }
                             </div>
                         </Link>

@@ -6,11 +6,12 @@ import { Routes } from 'react-router-dom'
 import { Route } from 'react-router-dom'
 import { ErrorPage } from '../../../../error/errorPage'
 import { AlmacenHistorials } from './almacen_historials'
+import { AlmacenCierresHistorial } from './almacen_cierres'
 
 export const AlmacenProductos = () => {
     return (
         <>
-            <div className='col-span-2 xl:col-span-1 dark:bg-[#4a5c68] bg-red-100 p-1 rounded-md'>
+            <div className='col-span-2 xl:col-span-1 dark:bg-[#4a5c68] bg-[#4a5c6830] p-1 rounded-md'>
                 <MainTargetInfo />
                 <ListAlmacenProductoTable />
             </div>
@@ -22,6 +23,10 @@ export const AlmacenProductos = () => {
                     <Route
                         path={`/historial/:almacen_producto_estado_id`}
                         element={<AlmacenHistorials />}
+                    />
+                    <Route
+                        path={`/cierres/:almacen_producto_estado_id`}
+                        element={<AlmacenCierresHistorial />}
                     />
                     <Route path='*' element={<ErrorPage />} />
                 </Routes>

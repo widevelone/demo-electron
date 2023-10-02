@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { requestDefaulAuth } from '../../../../../../http/httpRequest';
-import { MainTargetInfo } from '../../../../../../components/card/MainTargetInfo';
+import { DescriptionTargetInfo, ItemCardTargetInfo, LogoTargetInfo, MainTargetInfo, NumberTargetInfo, SubTitleTargetInfo, TitleTargetInfo } from '../../../../../../components/card/MainTargetInfo';
+import { formatDate } from '../../../../../../utils/dateFormat';
 
 const CardInfo = ({ reload }) => {
     const params = useParams()
@@ -23,13 +24,22 @@ const CardInfo = ({ reload }) => {
     }, [params.almacen_producto_estado_id, reload]);
     return (
         <MainTargetInfo
-            title={data?.estado_nombre}
-            subtitle={data?.producto_nombre}
-            description={data?.estado_descripcion}
-            logo='fa-database'
+            extraClassName='grid-cols-1 md:grid-cols-2 gap-1'
         >
-            <h5 className="font-bold text-gray-800 dark:text-gray-100">Total: <span className='text-red-400'>{data?.total || 0}</span>
-            </h5>
+            <ItemCardTargetInfo
+                logo={<LogoTargetInfo logo='fa-box-open' />}
+            >
+                <TitleTargetInfo label='' data={data?.estado_nombre} />
+                <DescriptionTargetInfo label='' data={data?.producto_nombre} />
+                <DescriptionTargetInfo label={data?.estado_descripcion} data={null} />
+                <DescriptionTargetInfo label='' data={formatDate(data?.createdAt)} />
+            </ItemCardTargetInfo>
+            <ItemCardTargetInfo>
+                <SubTitleTargetInfo label={null} data={'Cantidades'} />
+                <NumberTargetInfo label='Total' data={data?.cantidad_total} />
+                <NumberTargetInfo label='Total ingreso' data={data?.cantidad_total_ingreso} />
+                <NumberTargetInfo label='Total egreso' data={data?.cantidad_total_egreso} />
+            </ItemCardTargetInfo>
         </MainTargetInfo>
     )
 }

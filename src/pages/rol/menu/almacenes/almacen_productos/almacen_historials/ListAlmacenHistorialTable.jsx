@@ -70,9 +70,6 @@ export const ListAlmacenHistorialTable = ({
         setReload(!reload)
     }
 
-    // const redirect = (id) => {
-    //     navigate(`productos/${id}`)
-    // }
     return (
         <Section>
             <ActionSection>
@@ -84,18 +81,18 @@ export const ListAlmacenHistorialTable = ({
                             action: recall
                         },
                         {
-                            icon: 'add',
-                            label: 'Ingreso / Egreso',
+                            icon: 'plus-minus',
+                            label: 'Movimiento',
                             action: () => setCreateModal(true)
                         },
                         {
-                            icon: 'add',
+                            icon: 'plus-minus',
                             label: 'Traspaso interno',
                             action: () => setModalTraspaso(true),
-                            className: 'bg-lightBlue-400 dark:bg-lightBlue-600'
+                            className: 'bg-sky-400 dark:bg-sky-600'
                         },
                         {
-                            icon: 'add',
+                            icon: 'plus-minus',
                             label: 'Traspaso a otro almacén',
                             action: () => setModalTraspasoExterno(true),
                             className: 'bg-green-400 dark:bg-green-700'
@@ -158,8 +155,18 @@ export const ListAlmacenHistorialTable = ({
                             columns: ['user_nombres', 'user_apellido_paterno:user_apellido_materno']
                         },
                         {
+                            label: 'Cantidad anterior',
+                            columns: ['cantidad_anterior'],
+                            tag: true
+                        },
+                        {
                             label: 'Cantidad',
                             columns: ['cantidad'],
+                            tag: true
+                        },
+                        {
+                            label: 'Cantidad actual',
+                            columns: ['cantidad_actual'],
                             tag: true
                         },
                         {
@@ -192,12 +199,6 @@ export const ListAlmacenHistorialTable = ({
                                     action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
                                     reference: 'id'
                                 },
-                                // {
-                                //     type: 'other',
-                                //     icon: 'fa-eye',
-                                //     // action: (data) => redirect(data.id),
-                                //     reference: 'id'
-                                // }
                             ],
                             // stickyR: true
                         },
@@ -217,7 +218,7 @@ export const ListAlmacenHistorialTable = ({
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Ingreso simple"
+                    label="Ingreso directo"
                     dataValues={CreateValues(params?.almacen_producto_estado_id)}
                     urlApi={`/almacen_historial`}
                     method={'post'}
@@ -229,7 +230,7 @@ export const ListAlmacenHistorialTable = ({
                 modalTraspaso &&
                 <ModalForm
                     setModal={setModalTraspaso}
-                    label="Traspaso"
+                    label="Traspaso interno"
                     dataValues={CreateValuesTraspaso(params?.almacen_producto_estado_id)}
                     urlApi={`/almacen_historial_traspaso`}
                     method={'post'}
@@ -241,7 +242,7 @@ export const ListAlmacenHistorialTable = ({
                 modalTraspasoExterno &&
                 <ModalForm
                     setModal={setModalTraspasoExterno}
-                    label="Traspaso"
+                    label="Traspaso a otro almacén"
                     dataValues={CreateValuesTraspasoExterno(params?.almacen_producto_estado_id)}
                     urlApi={`/almacen_historial_traspaso`}
                     method={'post'}

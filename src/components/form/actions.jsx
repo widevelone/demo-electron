@@ -8,6 +8,7 @@ export const Actions = ({ buttons }) => {
                     <button
                         key={index}
                         type='button'
+                        title='asd'
                         className={`${className != null ? className : 'bg-yellow-500 dark:bg-yellow-600'}  shadow-md dark:hover:bg-gray-700 hover:bg-gray-300 text-black dark:text-white font-bold py-2 px-4 text-xs rounded`}
                         onClick={action}
                     >

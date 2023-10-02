@@ -1,6 +1,40 @@
 import { validationDateParam } from "../utils/dateFormat"
 import * as Yup from 'yup';
 
+
+export const CreateValues = () => {
+    return {
+        initialValues: {
+            etiqueta: '',
+            menus: [],
+        },
+        fieldsValidation: Yup.object().shape({
+            etiqueta: Yup.string()
+                .min(5, 'Mínimo 4 caracteres!')
+                .max(50, 'Máximo 40 caracteres!')
+                .required('Campo requerido'),
+        }),
+        fields: [
+            {
+                label: "Nombre del rol",
+                name: "etiqueta",
+                type: "text",
+                required: true,
+                placeholder: 'Nombre...',
+                autoFocus: true
+            },
+            {
+                label: "Asignar menus",
+                name: "menus",
+                type: "checkboxes",
+                required: false,
+                urlApi: "/menus",
+                indexLabel: 'etiqueta'
+            },
+        ]
+    }
+}
+
 export const UpdateValues = (data) => {
     let menus = []
     data?.menus?.forEach(menu => {
@@ -42,38 +76,7 @@ export const UpdateValues = (data) => {
                 type: "checkboxes",
                 required: false,
                 urlApi: "/menus",
-            },
-        ]
-    }
-}
-
-export const CreateValues = () => {
-    return {
-        initialValues: {
-            etiqueta: '',
-            menus: [],
-        },
-        fieldsValidation: Yup.object().shape({
-            etiqueta: Yup.string()
-                .min(5, 'Mínimo 4 caracteres!')
-                .max(50, 'Máximo 40 caracteres!')
-                .required('Campo requerido'),
-        }),
-        fields: [
-            {
-                label: "Nombre del rol",
-                name: "etiqueta",
-                type: "text",
-                required: true,
-                placeholder: 'Nombre...',
-                autoFocus: true
-            },
-            {
-                label: "Asignar menus",
-                name: "menus",
-                type: "checkboxes",
-                required: false,
-                urlApi: "/menus",
+                indexLabel: 'etiqueta'
             },
         ]
     }

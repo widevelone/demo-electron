@@ -40,6 +40,10 @@ export const useGeneralParams = (defaultPaginate) => {
     // delete modal form
     const [deleteModal, setDeleteModal] = useState(false);
 
+    const redirect = (toPath) => {
+        navigate(toPath)
+    }
+
     return {
         dispatch,
         navigate,
@@ -73,5 +77,6 @@ export const useGeneralParams = (defaultPaginate) => {
         Section,
         ModalForm,
         UpdateValuesModal,
+        redirect
     }
 }

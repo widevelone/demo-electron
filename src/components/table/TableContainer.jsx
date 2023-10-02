@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { badgeBooleanStateValue, badgeBooleanStyle, badgeBooleanValue, badgeStaticFormatStyle } from '../../utils/styleFormat';
+import Tooltip from '../tooltips/Tooltip';
 
 const TableCell = ({ head, item, selecteds, setSelecteds, isChecked, setIsChecked, rowIndex, checkList, clickFunc }) => {
     const handleCheckboxChange = () => {
@@ -158,25 +159,35 @@ const TableRow = ({ headers, item, indexRow, selectAllChecked, checkList, select
 };
 
 
-const ActionButton = ({ type, action, data, icon, reference }) => {
+const ActionButton = ({ type, action, data, icon, reference, tooltipText }) => {
     const getButtonColor = () => {
-        if (type === 'edit') {
+        if (type === 'edit' || type === 'yellow') {
             return 'yellow';
         } else if (type === 'delete') {
             return 'red';
         } else if (type === 'view') {
             return 'cyan';
+        } else if (type === 'green') {
+            return 'green';
+        } else if (type === 'red') {
+            return 'red';
         }
-        return '';
+        else{
+            return type
+        }
     };
 
     return (
-        <button
-            className={`dark:bg-gray-700 bg-gray-50 py-1 px-2 rounded-md dark:hover:bg-gray-800 hover:bg-gray-200 border dark:border-gray-500 border-gray-400`}
-            onClick={() => action(data)}
+        <Tooltip
+            text={tooltipText}
         >
-            <i className={`fa-solid ${icon} text-lg dark:text-${getButtonColor()}-500 text-${getButtonColor()}-500`} />
-        </button>
+            <button
+                className={`dark:bg-gray-700 bg-gray-50 py-1 px-2 rounded-md dark:hover:bg-gray-800 hover:bg-gray-200 border dark:border-gray-500 border-gray-400`}
+                onClick={() => action(data)}
+            >
+                <i className={`fa-solid ${icon} text-lg dark:text-${getButtonColor()}-500 text-${getButtonColor()}-500`} />
+            </button>
+        </Tooltip>
     );
 };
 
@@ -188,14 +199,26 @@ const ActionButtonsGroup = ({ actions, item }) => {
             }}
         >
             {actions.map((action, index) => (
-                <ActionButton
-                    key={index}
-                    type={action.type}
-                    action={action.action}
-                    data={item}
-                    icon={action.icon}
-                    reference={action.reference ? item[action.reference] : null}
-                />
+                action.validate && item[action.validate.value] === action.validate.validator ?
+                    <ActionButton
+                        key={index}
+                        type={action.type}
+                        action={action.action}
+                        data={item}
+                        icon={action.icon}
+                        reference={action.reference ? item[action.reference] : null}
+                        tooltipText={action.tooltipText}
+                    />
+                    :
+                    <ActionButton
+                        key={index}
+                        type={action.type}
+                        action={action.action}
+                        data={item}
+                        icon={action.icon}
+                        reference={action.reference ? item[action.reference] : null}
+                        tooltipText={action.tooltipText}
+                    />
             ))}
         </div>
     );

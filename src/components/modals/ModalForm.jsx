@@ -19,7 +19,7 @@ export const ModalForm = ({
     method,
     call,
     buttonLabel,
-    disabled
+    disabled,
 }) => {
     const dispatch = useDispatch()
     // useOnKeyDown(setModal);
@@ -67,6 +67,7 @@ export const ModalForm = ({
                                     values={values}
                                     setValues={setFieldValue}
                                     handleChange={handleChange}
+                                    calculators={dataValues.calculators}
                                 />
                             </ModalFormBody>
                         }

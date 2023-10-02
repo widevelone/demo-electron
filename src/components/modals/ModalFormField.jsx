@@ -5,6 +5,7 @@ import { toastOn } from '../../store/slices/toast'
 import { requestAuth } from '../../http/httpRequest'
 
 export const ModalFormField = ({ fields, errors, touched, values, setValues, handleChange }) => {
+
     return (
         fields?.map((field, index) => (
             <React.Fragment
@@ -30,6 +31,7 @@ const FieldParam = ({ field, errors, touched, values, setValues, handleChange })
         case "email":
         case "password":
         case "date":
+        case "datetime-local":
         case "number":
             return (
                 <div className="col-span-6 sm:col-span-4 md:col-span-3" >
@@ -73,6 +75,42 @@ const FieldParam = ({ field, errors, touched, values, setValues, handleChange })
                             autoFocus={field.autoFocus}
                             disabled={field.disabled}
                             autoComplete="new-password"
+                        />
+                        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-gray-300 rounded-r-lg dark:bg-gray-600 dark:text-gray-400 dark:border-gray-500">
+                            {field.subData}
+                        </span>
+                    </div>
+                    <ErrorLabel
+                        name={field.name}
+                        errors={errors}
+                        touched={touched}
+                    />
+
+                </div>
+            )
+        case "groupnumberCalculator":
+            return (
+                <div className="col-span-6 sm:col-span-4 md:col-span-3" >
+                    <label htmlFor={field.name} className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                        {field.label}
+                        {field.required && <RequiredPick />}
+                    </label>
+                    <div className="flex">
+                        <Field
+                            type={'number'}
+                            name={field.name}
+                            id={field.name}
+                            step='0.1'
+                            className="shadow-sm outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-semibold disabled:opacity-55 disabled:text-gray-500 dark:disabled:text-gray-400"
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            autoFocus={field.autoFocus}
+                            disabled={field.disabled}
+                            autoComplete="new-password"
+                            onChange={(e) => {
+                                handleChange(e)
+                                field.ChangeCalculator(values, setValues, e)
+                            }}
                         />
                         <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-gray-300 rounded-r-lg dark:bg-gray-600 dark:text-gray-400 dark:border-gray-500">
                             {field.subData}
@@ -230,7 +268,7 @@ const Checkboxes = ({
                                     disabled={item?.permanent}
                                 />
                                 <span className="m-2 text-sm font-semibold text-gray-900 dark:text-white">
-                                    {item.etiqueta}
+                                    {item[field.indexLabel]}
                                 </span>
                             </label>
                         </div>
@@ -388,7 +426,7 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
 
     useEffect(() => {
         getData()
-        if (values[field.name] != null && values[field.name] !== '')
+        if (values[field.name] !== null && values[field.name] !== '')
             definedSubList(values[field.name])
 
         setCalled(true)
@@ -400,7 +438,7 @@ const DoubleSelectApi = ({ field, errors, touched, values, setValues, handleChan
             setValues(field.sub_name, '')
             setSubList([])
         }
-        if (value !== null && value !== '') {
+        if (value !== null && value !== '' && value !== undefined) {
             await requestAuth(
                 'get',
                 field?.sub_urlApi.replace('{param}', value),

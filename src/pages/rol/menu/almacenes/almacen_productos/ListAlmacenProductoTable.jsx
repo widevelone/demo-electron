@@ -6,7 +6,6 @@ export const ListAlmacenProductoTable = () => {
     const {
         dispatch,
         params,
-        navigate,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -31,6 +30,7 @@ export const ListAlmacenProductoTable = () => {
         Section,
         ModalForm,
         UpdateValuesModal,
+        redirect
     } = useGeneralParams('nombre')
 
     const getDataPaginate = async () => {
@@ -61,9 +61,6 @@ export const ListAlmacenProductoTable = () => {
         getDataPaginate()
     }
 
-    const redirect = (id) => {
-        navigate(`historial/${id}`)
-    }
     return (
         <Section>
             <ActionSection>
@@ -143,7 +140,7 @@ export const ListAlmacenProductoTable = () => {
                         },
                         {
                             label: 'Total',
-                            columns: ['total']
+                            columns: ['cantidad_total']
                         },
                         {
                             label: 'Acciones',
@@ -156,8 +153,15 @@ export const ListAlmacenProductoTable = () => {
                                 {
                                     type: 'view',
                                     icon: 'fa-eye',
-                                    action: (data) => redirect(data.id),
+                                    action: (data) => redirect(`historial/${data.id}`),
                                     reference: 'id'
+                                },
+                                {
+                                    type: 'yellow',
+                                    icon: 'fa-shop-lock',
+                                    action: (data) => redirect(`cierres/${data.id}`),
+                                    reference: 'id',
+                                    tooltipText:'Cierres de almacén'
                                 },
                                 {
                                     type: 'delete',

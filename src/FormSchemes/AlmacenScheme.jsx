@@ -1,25 +1,23 @@
 import * as Yup from 'yup';
 
-export const UpdateValues = (data) => {
+export const CreateValues = () => {
     return {
         initialValues: {
-            id: data?.id ||'',
-            nombre: data?.nombre || '',
-            departamento_id: data?.departamento_id || '',
-            encargado_id: data?.encargado_id || '',
+            nombre: '',
+            encargado_id: '',
         },
         fieldsValidation: Yup.object().shape({
-            nombre: Yup.string()
-                .min(5, 'Mínimo 4 caracteres!')
-                .max(50, 'Máximo 40 caracteres!')
-                .required('Campo requerido'),
+            // nombre: Yup.string()
+            //     .min(5, 'Mínimo 4 caracteres!')
+            //     .max(50, 'Máximo 40 caracteres!')
+            //     .required('Campo requerido'),
         }),
         fields: [
             {
                 label: "Nombre del almacen",
                 name: "nombre",
                 type: "text",
-                required: true,
+                // required: true,
                 placeholder: 'Nombre...',
                 autoFocus: true
             },
@@ -28,6 +26,7 @@ export const UpdateValues = (data) => {
                 name: "departamento_id",
                 type: "doubleSelectApi",
                 required: false,
+                optionDescription: 'nombre',
                 urlApi: "/departamentos",
                 sub_name:'encargado_id',
                 sub_label: 'Seleccionar usuario',
@@ -38,24 +37,26 @@ export const UpdateValues = (data) => {
     }
 }
 
-export const CreateValues = () => {
+export const UpdateValues = (data) => {
     return {
         initialValues: {
-            nombre: '',
-            encargado_id: '',
+            id: data?.id ||'',
+            nombre: data?.nombre || '',
+            departamento_id: data?.departamento_id || '',
+            encargado_id: data?.encargado_id || '',
         },
         fieldsValidation: Yup.object().shape({
-            nombre: Yup.string()
-                .min(5, 'Mínimo 4 caracteres!')
-                .max(50, 'Máximo 40 caracteres!')
-                .required('Campo requerido'),
+            // nombre: Yup.string()
+            //     .min(5, 'Mínimo 4 caracteres!')
+            //     .max(50, 'Máximo 40 caracteres!')
+            //     .required('Campo requerido'),
         }),
         fields: [
             {
                 label: "Nombre del almacen",
                 name: "nombre",
                 type: "text",
-                required: true,
+                // required: true,
                 placeholder: 'Nombre...',
                 autoFocus: true
             },

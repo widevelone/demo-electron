@@ -18,7 +18,6 @@ import { CreateValues, DeleteValues, UpdateValues } from '../../../../FormScheme
 export const ListAlmacenTable = () => {
     const {
         dispatch,
-        navigate,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -44,6 +43,7 @@ export const ListAlmacenTable = () => {
         Section,
         ModalForm,
         UpdateValuesModal,
+        redirect
     } = useGeneralParams('nombre')
 
     const getDataPaginate = async () => {
@@ -74,9 +74,6 @@ export const ListAlmacenTable = () => {
         getDataPaginate()
     }
 
-    const redirect = (id) => {
-        navigate(`productos/${id}`)
-    }
     return (
         <Section>
             <ActionSection>
@@ -159,7 +156,7 @@ export const ListAlmacenTable = () => {
                                 {
                                     type: 'view',
                                     icon: 'fa-eye',
-                                    action: (data) => redirect(data.id),
+                                    action: (data) => redirect(`productos/${data.id}`),
                                     reference: 'id'
                                 },
                                 {

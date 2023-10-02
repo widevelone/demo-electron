@@ -7,6 +7,11 @@ import { Productos } from './productos'
 import { Almacenes } from './almacenes'
 import { useParams } from 'react-router-dom'
 import { Estados } from './estados'
+import { CuentaBancaria } from './cuenta_bancarias'
+
+import { Departamentos } from './departamentos'
+import { EfectivoGeneral } from './efectivos/efectivo_general'
+import { EfectivoBanco } from './efectivos/efectivo_banco'
 
 export const Menu = () => {
     const params = useParams()
@@ -21,6 +26,18 @@ export const Menu = () => {
                 <Roles />
             }
             {
+                params.menuname === 'departamentos' &&
+                <Departamentos />
+            }
+            {
+                params.menuname === 'estados' &&
+                <Estados />
+            }
+            {
+                params.menuname === 'cuentas-bancarias' &&
+                <CuentaBancaria />
+            }
+            {
                 params.menuname === 'productos' &&
                 <Productos />
             }
@@ -29,8 +46,12 @@ export const Menu = () => {
                 <Almacenes />
             }
             {
-                params.menuname === 'estados' &&
-                <Estados />
+                params.menuname === 'efectivo-general' &&
+                <EfectivoGeneral />
+            }
+            {
+                params.menuname === 'efectivo-banco' &&
+                <EfectivoBanco />
             }
             {
                 params.menuname === 'historial-de-sesiones' &&

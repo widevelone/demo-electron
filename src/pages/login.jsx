@@ -11,7 +11,7 @@ import { DefaultSubmit } from '../components/form/DefaultSubmit'
 import { requestAuth } from '../http/httpRequest'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import {  loginOn, saveToken, saveUserDetail } from '../store/slices/auth'
+import { loginOn, saveToken, saveUserDetail } from '../store/slices/auth'
 import { toastOn } from '../store/slices/toast/toastSlice'
 
 export const Login = () => {
@@ -24,7 +24,7 @@ export const Login = () => {
       <LogoTitle
         to="/login"
         src={logoWhite}
-        // text='SOYA SARI'
+      // text='SOYA SARI'
       />
       <DefaultCard>
         <DefaultTitle text='Inicie sesión en su cuenta' />
@@ -75,6 +75,7 @@ export const Login = () => {
                 errorMessage={errors.codigo && touched.codigo ? (
                   <div className="text-xs mt-1 font-semibold text-red-600 dark:text-red-600">{errors.codigo}</div>
                 ) : null}
+                autoFocus={true}
               />
               <Input
                 type="password"

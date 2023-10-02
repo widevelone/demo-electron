@@ -10,6 +10,8 @@ export function validationDateParam(date) {
 }
 
 export function formatDateWithTime(dateString) {
+    if (!dateString)
+        return '-'
     const date = new Date(dateString);
 
     const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -23,4 +25,20 @@ export function formatDateWithTime(dateString) {
     const minutes = date.getMinutes().toString().padStart(2, '0');
 
     return `${dayOfWeek} ${day}, ${month} de ${year} ${hours}:${minutes}`;
+}
+
+export function formatDate(dateString) {
+    if (!dateString)
+        return '-'
+    const date = new Date(dateString);
+
+    const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${dayOfWeek} ${day}, ${month} de ${year}`;
 }
