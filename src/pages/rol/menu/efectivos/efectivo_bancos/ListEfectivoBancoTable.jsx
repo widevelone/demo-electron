@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
-import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoGeneralScheme'
+import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoBancoScheme'
+// import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoCierreBancoScheme'
 
-export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
+export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
     const {
         dispatch,
         data, setData,
@@ -33,12 +34,12 @@ export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
 
     } = useGeneralParams('nombre')
 
-    let recallCount = 1
+    let recallCount =1
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/efectivos/general/pag`,
+            `/efectivos/bancos/pag`,
             null,
             paginate,
             setData,
@@ -150,6 +151,10 @@ export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
                             columns: ['nombres','apellido_paterno:apellido_materno']
                         },
                         {
+                            label: 'Cuenta bancaria',
+                            columns: ['cuenta_bancaria_nombre','cuenta_bancaria_numero']
+                        },
+                        {
                             label: 'Monto total',
                             columns: ['monto_total']
                         },
@@ -203,9 +208,9 @@ export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Crear efectivo general"
+                    label="Crear efectivo banco"
                     dataValues={CreateValues()}
-                    urlApi={'/efectivo/general'}
+                    urlApi={'/efectivo/banco'}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'

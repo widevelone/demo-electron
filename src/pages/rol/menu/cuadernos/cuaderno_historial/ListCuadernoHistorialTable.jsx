@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
-import { formatDateWithTime } from '../../../../../../utils/dateFormat'
-import { CreateValues } from '../../../../../../FormSchemes/EfectivoCierreGeneralHistorialScheme'
+import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
+import { formatDateWithTime } from '../../../../../utils/dateFormat'
+import { CreateValues } from '../../../../../FormSchemes/EfectivoCierreGeneralHistorialScheme'
 
-export const ListEfectivoGeneralHistorialTable = ({
+export const ListCuadernoHistorialTable = ({
     reload,
     setReload,
     dataCard,
@@ -39,12 +39,11 @@ export const ListEfectivoGeneralHistorialTable = ({
     } = useGeneralParams('nombre')
 
     const [egresoDirectoModal, setEgresoDirectoModal] = useState(false);
-    // const [modalTraspasoExterno, setModalTraspasoExterno] = useState(false);
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/efectivo/${params.efectivo_id}/historials/pag`,
+            `/cuaderno/${params.cuaderno_id}/historial/pag`,
             null,
             paginate,
             setData,
@@ -82,18 +81,18 @@ export const ListEfectivoGeneralHistorialTable = ({
                                 label: '',
                                 action: recall
                             },
-                            {
-                                icon: 'add',
-                                label: 'Ingreso directo',
-                                action: () => setCreateModal(true),
-                                className: 'dark:bg-green-700 bg-green-500'
-                            },
-                            {
-                                icon: 'minus',
-                                label: 'Egreso directo',
-                                action: () => setEgresoDirectoModal(true),
-                                className: 'dark:bg-red-700 bg-red-500'
-                            },
+                            // {
+                            //     icon: 'add',
+                            //     label: 'Ingreso directo',
+                            //     action: () => setCreateModal(true),
+                            //     className: 'dark:bg-green-700 bg-green-500'
+                            // },
+                            // {
+                            //     icon: 'minus',
+                            //     label: 'Egreso directo',
+                            //     action: () => setEgresoDirectoModal(true),
+                            //     className: 'dark:bg-red-700 bg-red-500'
+                            // },
                         ]}
                     />
                 }
@@ -238,7 +237,6 @@ export const ListEfectivoGeneralHistorialTable = ({
                     buttonLabel='Registrar'
                 />
             }
-
             {/* {
                 deleteModal &&
                 <ModalForm

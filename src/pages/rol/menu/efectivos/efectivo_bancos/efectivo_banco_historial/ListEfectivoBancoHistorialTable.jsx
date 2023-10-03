@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react'
-import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
-import { formatDateWithTime } from '../../../../../utils/dateFormat'
-import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoCierreBancoScheme'
-// import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoCierreBancoScheme'
+import React, { useEffect, useState } from 'react'
+import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
+import { formatDateWithTime } from '../../../../../../utils/dateFormat'
+import { CreateValues } from '../../../../../../FormSchemes/EfectivoCierreGeneralHistorialScheme'
 
-export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
+export const ListEfectivoBancoHistorialTable = ({
+    reload,
+    setReload,
+    dataCard,
+    mainReloadTable,
+    setMainReloadTable
+}) => {
     const {
         dispatch,
+        params,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -15,8 +21,6 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
         isChecked, setIsChecked,
         stateData, setStateData,
         createModal, setCreateModal,
-        deleteModal, setDeleteModal,
-        currentData, setCurrentData,
         // imports
         requestAuthPaginate,
         TableContainer,
@@ -30,17 +34,16 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
         ActionSection,
         Section,
         ModalForm,
-        UpdateValuesModal,
-        redirect
-
+        // UpdateValuesModal,
+        // redirect
     } = useGeneralParams('nombre')
 
-    let recallCount =1
+    const [egresoDirectoModal, setEgresoDirectoModal] = useState(false);
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/efectivos/banco/pag`,
+            `/efectivo/${params.efectivo_id}/historials/pag`,
             null,
             paginate,
             setData,
@@ -53,11 +56,7 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
         getDataPaginate();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
-
-    // useEffect(() => {
-    //     console.log(selecteds)
-    // }, [selecteds]);
+    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters, params.efectivo_id]);
 
     useEffect(() => {
         setSelectAllChecked(false)
@@ -67,31 +66,36 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
 
     const recall = () => {
         getDataPaginate()
+        setReload(!reload)
+        setMainReloadTable(!mainReloadTable)
     }
-    useEffect(() => {
-        if (recallCount > 1) {
-            recall()
-        }
-        recallCount++
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mainReloadTable])
+
     return (
         <Section>
             <ActionSection>
-                <Actions
-                    buttons={[
-                        {
-                            icon: 'repeat',
-                            label: '',
-                            action: recall
-                        },
-                        {
-                            icon: 'add',
-                            label: 'Crear',
-                            action: () => setCreateModal(true)
-                        },
-                    ]}
-                />
+                {
+                    <Actions
+                        buttons={[
+                            {
+                                icon: 'repeat',
+                                label: '',
+                                action: recall
+                            },
+                            {
+                                icon: 'add',
+                                label: 'Ingreso directo',
+                                action: () => setCreateModal(true),
+                                className: 'dark:bg-green-700 bg-green-500'
+                            },
+                            {
+                                icon: 'minus',
+                                label: 'Egreso directo',
+                                action: () => setEgresoDirectoModal(true),
+                                className: 'dark:bg-red-700 bg-red-500'
+                            },
+                        ]}
+                    />
+                }
                 <Searcher
                     paginate={paginate}
                     setPaginate={setPaginate}
@@ -103,8 +107,8 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
                             value: "nombre"
                         },
                         {
-                            label: "Código",
-                            value: "codigo"
+                            label: "Estado",
+                            value: "estado"
                         }
                     ]}
                 />
@@ -144,63 +148,58 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
                 <TableContainer
                     headers={[
                         {
-                            label: 'Nombre',
-                            columns: ['nombre']
+                            label: 'Responsable',
+                            columns: ['user_nombres', 'user_apellido_paterno:user_apellido_materno']
                         },
                         {
-                            label: 'Efectivo inicial',
-                            columns: ['efectivo_inicial']
+                            label: 'Monto anterior',
+                            columns: ['monto_anterior'],
+                            tag: true
                         },
                         {
-                            label: 'Efectivo final',
-                            columns: ['efectivo_final']
+                            label: 'Monto',
+                            columns: ['monto'],
+                            tag: true
                         },
                         {
-                            label: 'Abierto / cerrado',
-                            columns: ['abierto'],
+                            label: 'Monto actual',
+                            columns: ['monto_actual'],
+                            tag: true
+                        },
+                        {
+                            label: 'Billetes',
+                            columns: ['billetes'],
+                            tag: true
+                        },
+                        {
+                            label: 'Monedas',
+                            columns: ['monedas'],
+                            tag: true
+                        },
+                        {
+                            label: 'Dolares en Bs.',
+                            columns: ['dolares_en_bs'],
+                            tag: true
+                        },
+                        {
+                            label: 'ingreso / egreso',
+                            columns: ['ingreso'],
                             booleanState: true,
-                            booleanOptions: ['abierto', 'cerrado']
+                            booleanOptions: ['ingreso', 'egreso']
                         },
                         {
-                            label: 'fecha de inicio',
-                            columns: ['fecha_inicio'],
+                            label: 'CÓDIGO DE TRANSACCIÓN',
+                            columns: ['transaccion_id'],
+                        },
+                        {
+                            label: 'fecha de registro',
+                            columns: ['createdAt'],
                             transform: true,
                             func: formatDateWithTime
-                        },
-                        {
-                            label: 'fecha de cierre',
-                            columns: ['fecha_fin'],
-                            transform: true,
-                            func: formatDateWithTime
-                        },
-                        {
-                            label: 'Acciones',
-                            actions: [
-                                {
-                                    type: 'green',
-                                    icon: 'fa-square-plus',
-                                    action: (data) => redirect(`ingresos/${data.id}`),
-                                    reference: 'id'
-                                },
-                                {
-                                    type: 'yellow',
-                                    icon: 'fa-square-minus',
-                                    action: (data) => redirect(`egresos/${data.id}`),
-                                    reference: 'id'
-                                },
-                                {
-                                    type: 'delete',
-                                    icon: 'fa-trash',
-                                    action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
-                                    reference: 'id',
-                                    validate: { value: 'abierto', validator: true }
-                                }
-                            ],
-                            // stickyR: true
                         },
                     ]}
                     data={data.data}
-                    checkList={false}
+                    checkList={true}
                     selecteds={selecteds}
                     setSelecteds={setSelecteds}
                     selectAllChecked={selectAllChecked}
@@ -210,30 +209,46 @@ export const ListEfectivoBancoTable = ({ mainReloadTable }) => {
                     stateData={stateData}
                 />
             </TableSection>
+            {/* <Paginator
+                paginate={paginate}
+                setPaginate={setPaginate}
+            /> */}
             {
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Crear efectivo banco"
-                    dataValues={CreateValues()}
-                    urlApi={'/efectivo/banco'}
+                    label="Registrar Ingreso directo de efectivo"
+                    dataValues={CreateValues(params?.efectivo_id, true)}
+                    urlApi={`/efectivo_historial`}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'
                 />
             }
             {
+                egresoDirectoModal &&
+                <ModalForm
+                    setModal={setEgresoDirectoModal}
+                    label="Registrar Egreso directo de efectivo"
+                    dataValues={CreateValues(params?.efectivo_id, false)}
+                    urlApi={`/efectivo_historial`}
+                    method={'post'}
+                    call={recall}
+                    buttonLabel='Registrar'
+                />
+            }
+            {/* {
                 deleteModal &&
                 <ModalForm
                     setModal={setDeleteModal}
-                    label="Eliminar efectivo"
+                    label="Eliminar producto del almacén"
                     dataValues={DeleteValues(currentData)}
-                    urlApi={`/efectivo/${currentData.id}`}
+                    urlApi={`/almacen_producto/${currentData.id}`}
                     method={'delete'}
                     call={recall}
                     buttonLabel='Eliminar'
                 />
-            }
+            } */}
         </Section>
     )
 }

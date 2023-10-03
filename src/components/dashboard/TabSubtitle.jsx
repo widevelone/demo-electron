@@ -59,7 +59,7 @@ export const TabSubtitle = () => {
                 to={`/rol/${tab?.nombrerol}/menu/${tab?.nombremenu}/${partial[4]}/${partial[5]}`}
             >
                 <TabSlash
-                    val={partial[5]}
+                    val={partial[4]}
                     validate={partial[5]}
                 />
             </Link>

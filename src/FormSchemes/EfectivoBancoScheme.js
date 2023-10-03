@@ -4,13 +4,16 @@ export const CreateValues = () => {
     return {
         initialValues: {
             nombre: '',
-            encargado_id: '',
+            encargado_id: 0,
+            cuenta_bancaria_id: 0
         },
         fieldsValidation: Yup.object().shape({
             // nombre: Yup.string()
             //     .min(4, 'Mínimo 4 caracteres!')
             //     .max(50, 'Máximo 40 caracteres!')
             //     .required('Campo requerido'),
+            cuenta_bancaria_id: Yup.string()
+                .required('campo requerido')
             // efectivo_inicial: DecimalValidationMoreThanZero,
             // billetes_inicial: DecimalValidation,
             // monedas_inicial: DecimalValidation,
@@ -18,25 +21,33 @@ export const CreateValues = () => {
         }),
         fields: [
             {
-                label: "Nombre del almacen",
-                name: "nombre",
-                type: "text",
-                // required: true,
+                label: 'Nombre',
+                name: 'nombre',
+                type: 'text',
+                required: false,
                 placeholder: 'Nombre...',
                 autoFocus: true
             },
             {
-                label: "Buscar usuario por departamento",
-                name: "departamento_id",
-                type: "doubleSelectApi",
-                required: false,
-                optionDescription: 'nombre',
-                urlApi: "/departamentos",
-                sub_name: 'encargado_id',
-                sub_label: 'Seleccionar usuario',
-                sub_urlApi: "/departamento/{param}/users",
-                sub_optionDescription: 'etiqueta',
+                label: "Seleccionar cuenta bancaria",
+                name: "cuenta_bancaria_id",
+                type: "selectApi",
+                required: true,
+                urlApi: "/cuenta_bancarias",
+                optionDescription: "cuenta_bancaria_nombre",
             },
+            // {
+            //     label: "Buscar usuario por departamento",
+            //     name: "departamento_id",
+            //     type: "doubleSelectApi",
+            //     required: false,
+            //     optionDescription: 'nombre',
+            //     urlApi: "/departamentos",
+            //     sub_name: 'encargado_id',
+            //     sub_label: 'Seleccionar usuario',
+            //     sub_urlApi: "/departamento/{param}/users",
+            //     sub_optionDescription: 'etiqueta',
+            // },
             // {
             //     label: 'Efectivo inicial',
             //     name: 'efectivo_inicial',

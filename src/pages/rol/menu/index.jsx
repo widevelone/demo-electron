@@ -11,7 +11,9 @@ import { CuentaBancaria } from './cuenta_bancarias'
 
 import { Departamentos } from './departamentos'
 import { EfectivoGeneral } from './efectivos/efectivo_general'
-import { EfectivoBanco } from './efectivos/efectivo_banco'
+import { EfectivoBanco } from './efectivos/efectivo_bancos'
+import { EfectivoProducto } from './efectivos/efectivo_productos'
+import { Cuaderno } from './cuadernos'
 
 export const Menu = () => {
     const params = useParams()
@@ -50,8 +52,16 @@ export const Menu = () => {
                 <EfectivoGeneral />
             }
             {
-                params.menuname === 'efectivo-banco' &&
+                params.menuname === 'efectivo-bancos' &&
                 <EfectivoBanco />
+            }
+            {
+                params.menuname === 'efectivo-productos' &&
+                <EfectivoProducto />
+            }
+            {
+                params.menuname === 'cuadernos' &&
+                <Cuaderno />
             }
             {
                 params.menuname === 'historial-de-sesiones' &&

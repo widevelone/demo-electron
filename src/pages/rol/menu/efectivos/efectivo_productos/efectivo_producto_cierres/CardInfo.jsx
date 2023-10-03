@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { requestDefaulAuth } from '../../../../../../http/httpRequest'
-import { DescriptionTargetInfo, ItemCardTargetInfo, LogoTargetInfo, MainTargetInfo, NumberTargetInfo, SubTitleTargetInfo, TitleTargetInfo } from '../../../../../../components/card/MainTargetInfo'
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { requestDefaulAuth } from '../../../../../../http/httpRequest';
+import { DescriptionTargetInfo, ItemCardTargetInfo, LogoTargetInfo, MainTargetInfo, NumberTargetInfo, SubTitleTargetInfo, TitleTargetInfo } from '../../../../../../components/card/MainTargetInfo';
 import { JoinStrings } from '../../../../../../utils/dataValidations'
 
 const CardInfo = ({ reload, data, setData }) => {
@@ -19,9 +19,9 @@ const CardInfo = ({ reload, data, setData }) => {
         )
     }
     useEffect(() => {
-        getData()
+        getData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params.efectivo_id, reload])
+    }, [params.efectivo_id, reload]);
     return (
         <MainTargetInfo
             extraClassName='grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-1'
@@ -31,6 +31,10 @@ const CardInfo = ({ reload, data, setData }) => {
             >
                 <TitleTargetInfo label={''} data={data?.estado_nombre} />
                 {
+                    data?.producto_id &&
+                    <DescriptionTargetInfo label='Producto:' data={JoinStrings([data.producto_nombre], ' - ')} />
+                }
+                {
                     data?.nombre &&
                     <DescriptionTargetInfo label='Nombre:' data={data?.nombre} />
                 }
@@ -38,7 +42,10 @@ const CardInfo = ({ reload, data, setData }) => {
                     data?.encargado_id &&
                     <DescriptionTargetInfo label='Encargado:' data={JoinStrings([data.nombres, data.apellido_paterno, data.apellido_materno], ' ')} />
                 }
-                <DescriptionTargetInfo label='Obs:' data={data?.obs} />
+                {
+                    data?.obs &&
+                    <DescriptionTargetInfo label='Obs:' data={data?.obs} />
+                }
             </ItemCardTargetInfo>
             <ItemCardTargetInfo>
                 <SubTitleTargetInfo label={null} data={'Montos'} />

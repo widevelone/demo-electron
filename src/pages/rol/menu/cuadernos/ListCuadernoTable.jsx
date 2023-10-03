@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
-import { formatDateWithTime } from '../../../../../../utils/dateFormat'
-import { CreateValues } from '../../../../../../FormSchemes/EfectivoCierreGeneralHistorialScheme'
+import React, { useEffect } from 'react'
+import { useGeneralParams } from '../../../../hooks/useDataPaginate'
+import { CreateValues } from '../../../../FormSchemes/CuadernoScheme'
+import { formatDateWithTime } from '../../../../utils/dateFormat'
 
-export const ListEfectivoGeneralHistorialTable = ({
-    reload,
-    setReload,
-    dataCard,
-    mainReloadTable,
-    setMainReloadTable
-}) => {
+export const ListCuadernoTable = () => {
     const {
         dispatch,
-        params,
         data, setData,
         paginate, setPaginate,
         selectedDay, setSelectedDay,
@@ -21,6 +14,9 @@ export const ListEfectivoGeneralHistorialTable = ({
         isChecked, setIsChecked,
         stateData, setStateData,
         createModal, setCreateModal,
+        // updateModal, setUpdateModal,
+        // deleteModal, setDeleteModal,
+        // currentData, setCurrentData,
         // imports
         requestAuthPaginate,
         TableContainer,
@@ -35,16 +31,14 @@ export const ListEfectivoGeneralHistorialTable = ({
         Section,
         ModalForm,
         // UpdateValuesModal,
-        // redirect
+        redirect
+        
     } = useGeneralParams('nombre')
-
-    const [egresoDirectoModal, setEgresoDirectoModal] = useState(false);
-    // const [modalTraspasoExterno, setModalTraspasoExterno] = useState(false);
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/efectivo/${params.efectivo_id}/historials/pag`,
+            `/cuadernos/pag`,
             null,
             paginate,
             setData,
@@ -57,46 +51,38 @@ export const ListEfectivoGeneralHistorialTable = ({
         getDataPaginate();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters, params.efectivo_id]);
+    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
+
+    // useEffect(() => {
+    //     console.log(selecteds)
+    // }, [selecteds]);
 
     useEffect(() => {
         setSelectAllChecked(false)
         setIsChecked(false)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters]);
 
     const recall = () => {
         getDataPaginate()
-        setReload(!reload)
-        setMainReloadTable(!mainReloadTable)
     }
-
     return (
         <Section>
             <ActionSection>
-                {
-                    <Actions
-                        buttons={[
-                            {
-                                icon: 'repeat',
-                                label: '',
-                                action: recall
-                            },
-                            {
-                                icon: 'add',
-                                label: 'Ingreso directo',
-                                action: () => setCreateModal(true),
-                                className: 'dark:bg-green-700 bg-green-500'
-                            },
-                            {
-                                icon: 'minus',
-                                label: 'Egreso directo',
-                                action: () => setEgresoDirectoModal(true),
-                                className: 'dark:bg-red-700 bg-red-500'
-                            },
-                        ]}
-                    />
-                }
+                <Actions
+                    buttons={[
+                        {
+                            icon: 'repeat',
+                            label: '',
+                            action: recall
+                        },
+                        {
+                            icon: 'add',
+                            label: 'Aperturar',
+                            action: () => setCreateModal(true)
+                        },
+                    ]}
+                />
                 <Searcher
                     paginate={paginate}
                     setPaginate={setPaginate}
@@ -108,8 +94,8 @@ export const ListEfectivoGeneralHistorialTable = ({
                             value: "nombre"
                         },
                         {
-                            label: "Estado",
-                            value: "estado"
+                            label: "Código",
+                            value: "codigo"
                         }
                     ]}
                 />
@@ -149,48 +135,17 @@ export const ListEfectivoGeneralHistorialTable = ({
                 <TableContainer
                     headers={[
                         {
+                            label: 'Código',
+                            columns: ['codigo']
+                        },
+                        {
                             label: 'Responsable',
-                            columns: ['user_nombres', 'user_apellido_paterno:user_apellido_materno']
+                            columns: ['nombres','apellido_paterno:apellido_materno']
                         },
                         {
-                            label: 'Monto anterior',
-                            columns: ['monto_anterior'],
+                            label: 'Efectivo Bs.',
+                            columns: ['efectivo_total'],
                             tag: true
-                        },
-                        {
-                            label: 'Monto',
-                            columns: ['monto'],
-                            tag: true
-                        },
-                        {
-                            label: 'Monto actual',
-                            columns: ['monto_actual'],
-                            tag: true
-                        },
-                        {
-                            label: 'Billetes',
-                            columns: ['billetes'],
-                            tag: true
-                        },
-                        {
-                            label: 'Monedas',
-                            columns: ['monedas'],
-                            tag: true
-                        },
-                        {
-                            label: 'Dolares en Bs.',
-                            columns: ['dolares_en_bs'],
-                            tag: true
-                        },
-                        {
-                            label: 'ingreso / egreso',
-                            columns: ['ingreso'],
-                            booleanState: true,
-                            booleanOptions: ['ingreso', 'egreso']
-                        },
-                        {
-                            label: 'CÓDIGO DE TRANSACCIÓN',
-                            columns: ['transaccion_id'],
                         },
                         {
                             label: 'fecha de registro',
@@ -198,6 +153,42 @@ export const ListEfectivoGeneralHistorialTable = ({
                             transform: true,
                             func: formatDateWithTime
                         },
+                        {
+                            label: 'Acciones',
+                            actions: [
+                                {
+                                    type: 'cyan',
+                                    icon: 'fa-eye',
+                                    action: (data) => redirect(`historial/${data.id}`),
+                                    reference: 'id'
+                                },
+                                // {
+                                //     type: 'delete',
+                                //     icon: 'fa-trash',
+                                //     action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
+                                //     reference: 'id',
+                                //     validate: { value: 'abierto', validator: true }
+                                // }
+                            ],
+                            // stickyR: true
+                        },
+                        // {
+                        //     label: 'Acciones',
+                        //     actions: [
+                        //         {
+                        //             type: 'edit',
+                        //             icon: 'fa-edit',
+                        //             action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
+                        //         },
+                        //         {
+                        //             type: 'delete',
+                        //             icon: 'fa-trash',
+                        //             action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
+                        //             reference: 'id'
+                        //         }
+                        //     ],
+                        //     // stickyR: true
+                        // },
                     ]}
                     data={data.data}
                     checkList={true}
@@ -210,42 +201,38 @@ export const ListEfectivoGeneralHistorialTable = ({
                     stateData={stateData}
                 />
             </TableSection>
-            {/* <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            /> */}
             {
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Registrar Ingreso directo de efectivo"
-                    dataValues={CreateValues(params?.efectivo_id, true)}
-                    urlApi={`/efectivo_historial`}
+                    label="Aperturar cuaderno"
+                    dataValues={CreateValues()}
+                    urlApi={'/cuaderno'}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'
                 />
             }
-            {
-                egresoDirectoModal &&
-                <ModalForm
-                    setModal={setEgresoDirectoModal}
-                    label="Registrar Egreso directo de efectivo"
-                    dataValues={CreateValues(params?.efectivo_id, false)}
-                    urlApi={`/efectivo_historial`}
-                    method={'post'}
-                    call={recall}
-                    buttonLabel='Registrar'
-                />
-            }
-
             {/* {
+                updateModal &&
+                <ModalForm
+                    setModal={setUpdateModal}
+                    label="Editar cuenta bancaria"
+                    dataValues={UpdateValues(currentData)}
+                    urlApi={'/cuenta_bancaria'}
+                    method={'put'}
+                    call={recall}
+                    buttonLabel='Editar'
+                />
+            }
+            
+            {
                 deleteModal &&
                 <ModalForm
                     setModal={setDeleteModal}
-                    label="Eliminar producto del almacén"
+                    label="Eliminar cuenta bancaria"
                     dataValues={DeleteValues(currentData)}
-                    urlApi={`/almacen_producto/${currentData.id}`}
+                    urlApi={`/cuenta_bancaria/${currentData.id}`}
                     method={'delete'}
                     call={recall}
                     buttonLabel='Eliminar'

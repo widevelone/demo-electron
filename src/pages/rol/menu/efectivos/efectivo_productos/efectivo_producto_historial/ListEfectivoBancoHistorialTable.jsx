@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
 import { formatDateWithTime } from '../../../../../../utils/dateFormat'
 import { CreateValues } from '../../../../../../FormSchemes/EfectivoCierreGeneralHistorialScheme'
-import { DeleteValues } from '../../../../../../FormSchemes/EfectivoCierreGeneralScheme'
 
 export const ListEfectivoBancoHistorialTable = ({
     reload,
@@ -22,7 +21,6 @@ export const ListEfectivoBancoHistorialTable = ({
         isChecked, setIsChecked,
         stateData, setStateData,
         createModal, setCreateModal,
-        updateModal, setUpdateModal,
         // imports
         requestAuthPaginate,
         TableContainer,
@@ -39,6 +37,8 @@ export const ListEfectivoBancoHistorialTable = ({
         // UpdateValuesModal,
         // redirect
     } = useGeneralParams('nombre')
+
+    const [egresoDirectoModal, setEgresoDirectoModal] = useState(false);
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
@@ -74,37 +74,27 @@ export const ListEfectivoBancoHistorialTable = ({
         <Section>
             <ActionSection>
                 {
-                    dataCard?.abierto ?
-                        <Actions
-                            buttons={[
-                                {
-                                    icon: 'repeat',
-                                    label: '',
-                                    action: recall
-                                },
-                                {
-                                    icon: 'add',
-                                    label: 'Crear',
-                                    action: () => setCreateModal(true)
-                                },
-                                {
-                                    icon: 'lock',
-                                    label: 'Cerrar',
-                                    action: () => setUpdateModal(true),
-                                    className: 'bg-lightBlue-400 dark:bg-lightBlue-600'
-                                },
-                            ]}
-                        />
-                        :
-                        <Actions
-                            buttons={[
-                                {
-                                    icon: 'repeat',
-                                    label: '',
-                                    action: recall
-                                }
-                            ]}
-                        />
+                    <Actions
+                        buttons={[
+                            {
+                                icon: 'repeat',
+                                label: '',
+                                action: recall
+                            },
+                            {
+                                icon: 'add',
+                                label: 'Ingreso directo',
+                                action: () => setCreateModal(true),
+                                className: 'dark:bg-green-700 bg-green-500'
+                            },
+                            {
+                                icon: 'minus',
+                                label: 'Egreso directo',
+                                action: () => setEgresoDirectoModal(true),
+                                className: 'dark:bg-red-700 bg-red-500'
+                            },
+                        ]}
+                    />
                 }
                 <Searcher
                     paginate={paginate}
@@ -158,24 +148,48 @@ export const ListEfectivoBancoHistorialTable = ({
                 <TableContainer
                     headers={[
                         {
-                            label: 'Monto Bs.',
-                            columns: ['monto']
+                            label: 'Responsable',
+                            columns: ['user_nombres', 'user_apellido_paterno:user_apellido_materno']
+                        },
+                        {
+                            label: 'Monto anterior',
+                            columns: ['monto_anterior'],
+                            tag: true
+                        },
+                        {
+                            label: 'Monto',
+                            columns: ['monto'],
+                            tag: true
+                        },
+                        {
+                            label: 'Monto actual',
+                            columns: ['monto_actual'],
+                            tag: true
                         },
                         {
                             label: 'Billetes',
-                            columns: ['billetes']
+                            columns: ['billetes'],
+                            tag: true
                         },
                         {
                             label: 'Monedas',
-                            columns: ['monedas']
+                            columns: ['monedas'],
+                            tag: true
                         },
                         {
-                            label: 'Dolar en Bs.',
-                            columns: ['dolares_en_bs']
+                            label: 'Dolares en Bs.',
+                            columns: ['dolares_en_bs'],
+                            tag: true
                         },
                         {
-                            label: 'Dolar en Bs.',
-                            columns: ['dolares_en_bs']
+                            label: 'ingreso / egreso',
+                            columns: ['ingreso'],
+                            booleanState: true,
+                            booleanOptions: ['ingreso', 'egreso']
+                        },
+                        {
+                            label: 'CÓDIGO DE TRANSACCIÓN',
+                            columns: ['transaccion_id'],
                         },
                         {
                             label: 'fecha de registro',
@@ -183,29 +197,6 @@ export const ListEfectivoBancoHistorialTable = ({
                             transform: true,
                             func: formatDateWithTime
                         },
-                        // {
-                        //     label: 'Acciones',
-                        //     actions: [
-                        // {
-                        //     type: 'edit',
-                        //     icon: 'fa-edit',
-                        //     // action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
-                        // },
-                        // {
-                        //     type: 'view',
-                        //     icon: 'fa-eye',
-                        //     action: (data) => redirect(`historial/${data.id}`),
-                        //     reference: 'id'
-                        // },
-                        // {
-                        //     type: 'delete',
-                        //     icon: 'fa-trash',
-                        //     action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
-                        //     reference: 'id'
-                        // },
-                        // ],
-                        // stickyR: true
-                        // },
                     ]}
                     data={data.data}
                     checkList={true}
@@ -226,24 +217,24 @@ export const ListEfectivoBancoHistorialTable = ({
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Registrar Ingreso de efectivo"
-                    dataValues={CreateValues(params?.efectivo_id)}
-                    urlApi={`/efectivo_historial/general`}
+                    label="Registrar Ingreso directo de efectivo"
+                    dataValues={CreateValues(params?.efectivo_id, true)}
+                    urlApi={`/efectivo_historial`}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'
                 />
             }
             {
-                updateModal &&
+                egresoDirectoModal &&
                 <ModalForm
-                    setModal={setUpdateModal}
-                    label="Cerrar efectivo"
-                    dataValues={DeleteValues({})}
-                    urlApi={`/efectivo/${params.efectivo_id}/close`}
-                    method={'put'}
+                    setModal={setEgresoDirectoModal}
+                    label="Registrar Egreso directo de efectivo"
+                    dataValues={CreateValues(params?.efectivo_id, false)}
+                    urlApi={`/efectivo_historial`}
+                    method={'post'}
                     call={recall}
-                    buttonLabel='Cerrar'
+                    buttonLabel='Registrar'
                 />
             }
             {/* {

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useGeneralParams } from '../../../../../hooks/useDataPaginate'
-import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoGeneralScheme'
+import { CreateValues, DeleteValues } from '../../../../../FormSchemes/EfectivoProductoScheme'
 
-export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
+export const ListEfectivoProductoTable = ({ mainReloadTable }) => {
     const {
         dispatch,
         data, setData,
@@ -33,12 +33,12 @@ export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
 
     } = useGeneralParams('nombre')
 
-    let recallCount = 1
+    let recallCount =1
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/efectivos/general/pag`,
+            `/efectivos/productos/pag`,
             null,
             paginate,
             setData,
@@ -150,6 +150,10 @@ export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
                             columns: ['nombres','apellido_paterno:apellido_materno']
                         },
                         {
+                            label: 'Producto',
+                            columns: ['producto_nombre']
+                        },
+                        {
                             label: 'Monto total',
                             columns: ['monto_total']
                         },
@@ -203,9 +207,9 @@ export const ListEfectivoGeneralTable = ({ mainReloadTable }) => {
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Crear efectivo general"
+                    label="Crear efectivo producto"
                     dataValues={CreateValues()}
-                    urlApi={'/efectivo/general'}
+                    urlApi={'/efectivo/producto'}
                     method={'post'}
                     call={recall}
                     buttonLabel='Registrar'

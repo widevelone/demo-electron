@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useGeneralParams } from '../../../../../../hooks/useDataPaginate'
 import { formatDateWithTime } from '../../../../../../utils/dateFormat'
-import { CreateValues } from '../../../../../../FormSchemes/EfectivoCierreGeneralHistorialScheme'
+import { CreateValues, DeleteValues } from '../../../../../../FormSchemes/EfectivoCierreScheme'
 
-export const ListEfectivoGeneralHistorialTable = ({
+export const ListEfectivoBancoCierreTable = ({
     reload,
-    setReload,
-    dataCard,
-    mainReloadTable,
-    setMainReloadTable
+    setReload
 }) => {
     const {
         dispatch,
@@ -21,6 +18,8 @@ export const ListEfectivoGeneralHistorialTable = ({
         isChecked, setIsChecked,
         stateData, setStateData,
         createModal, setCreateModal,
+        deleteModal, setDeleteModal,
+        currentData, setCurrentData,
         // imports
         requestAuthPaginate,
         TableContainer,
@@ -34,17 +33,13 @@ export const ListEfectivoGeneralHistorialTable = ({
         ActionSection,
         Section,
         ModalForm,
-        // UpdateValuesModal,
-        // redirect
+        UpdateValuesModal,
     } = useGeneralParams('nombre')
-
-    const [egresoDirectoModal, setEgresoDirectoModal] = useState(false);
-    // const [modalTraspasoExterno, setModalTraspasoExterno] = useState(false);
 
     const getDataPaginate = async () => {
         await requestAuthPaginate(
             'get',
-            `/efectivo/${params.efectivo_id}/historials/pag`,
+            `/efectivo/${params.efectivo_id}/cierres/pag`,
             null,
             paginate,
             setData,
@@ -57,7 +52,7 @@ export const ListEfectivoGeneralHistorialTable = ({
         getDataPaginate();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters, params.efectivo_id]);
+    }, [paginate.currentPage, paginate.pageSize, paginate.filterBy, paginate.filterParam, paginate.initial, paginate.final, paginate.filters, params.almacen_producto_estado_id]);
 
     useEffect(() => {
         setSelectAllChecked(false)
@@ -68,35 +63,37 @@ export const ListEfectivoGeneralHistorialTable = ({
     const recall = () => {
         getDataPaginate()
         setReload(!reload)
-        setMainReloadTable(!mainReloadTable)
     }
 
     return (
         <Section>
             <ActionSection>
-                {
-                    <Actions
-                        buttons={[
-                            {
-                                icon: 'repeat',
-                                label: '',
-                                action: recall
-                            },
-                            {
-                                icon: 'add',
-                                label: 'Ingreso directo',
-                                action: () => setCreateModal(true),
-                                className: 'dark:bg-green-700 bg-green-500'
-                            },
-                            {
-                                icon: 'minus',
-                                label: 'Egreso directo',
-                                action: () => setEgresoDirectoModal(true),
-                                className: 'dark:bg-red-700 bg-red-500'
-                            },
-                        ]}
-                    />
-                }
+                <Actions
+                    buttons={[
+                        {
+                            icon: 'repeat',
+                            label: '',
+                            action: recall
+                        },
+                        {
+                            icon: 'shop-lock',
+                            label: 'Crear cierre',
+                            action: () => setCreateModal(true)
+                        },
+                        // {
+                        //     icon: 'plus-minus',
+                        //     label: 'Traspaso interno',
+                        //     action: () => setModalTraspaso(true),
+                        //     className: 'bg-sky-400 dark:bg-sky-600'
+                        // },
+                        // {
+                        //     icon: 'plus-minus',
+                        //     label: 'Traspaso a otro almacén',
+                        //     action: () => setModalTraspasoExterno(true),
+                        //     className: 'bg-green-400 dark:bg-green-700'
+                        // },
+                    ]}
+                />
                 <Searcher
                     paginate={paginate}
                     setPaginate={setPaginate}
@@ -108,8 +105,8 @@ export const ListEfectivoGeneralHistorialTable = ({
                             value: "nombre"
                         },
                         {
-                            label: "Estado",
-                            value: "estado"
+                            label: "Código",
+                            value: "codigo"
                         }
                     ]}
                 />
@@ -149,58 +146,62 @@ export const ListEfectivoGeneralHistorialTable = ({
                 <TableContainer
                     headers={[
                         {
-                            label: 'Responsable',
-                            columns: ['user_nombres', 'user_apellido_paterno:user_apellido_materno']
+                            label: 'Nombre',
+                            columns: ['nombre']
                         },
                         {
-                            label: 'Monto anterior',
-                            columns: ['monto_anterior'],
+                            label: 'Monto inicial',
+                            columns: ['monto_inicial'],
                             tag: true
                         },
                         {
-                            label: 'Monto',
-                            columns: ['monto'],
+                            label: 'Monto final',
+                            columns: ['monto_final'],
                             tag: true
                         },
                         {
-                            label: 'Monto actual',
-                            columns: ['monto_actual'],
+                            label: 'Monto ingreso',
+                            columns: ['monto_total_ingreso'],
                             tag: true
                         },
                         {
-                            label: 'Billetes',
-                            columns: ['billetes'],
+                            label: 'Monto egreso',
+                            columns: ['monto_total_egreso'],
                             tag: true
                         },
                         {
-                            label: 'Monedas',
-                            columns: ['monedas'],
-                            tag: true
-                        },
-                        {
-                            label: 'Dolares en Bs.',
-                            columns: ['dolares_en_bs'],
-                            tag: true
-                        },
-                        {
-                            label: 'ingreso / egreso',
-                            columns: ['ingreso'],
-                            booleanState: true,
-                            booleanOptions: ['ingreso', 'egreso']
-                        },
-                        {
-                            label: 'CÓDIGO DE TRANSACCIÓN',
-                            columns: ['transaccion_id'],
-                        },
-                        {
-                            label: 'fecha de registro',
-                            columns: ['createdAt'],
+                            label: 'Fecha de inicio',
+                            columns: ['fecha_inicio'],
                             transform: true,
                             func: formatDateWithTime
                         },
+                        {
+                            label: 'Fecha de fin',
+                            columns: ['fecha_fin'],
+                            transform: true,
+                            func: formatDateWithTime
+                        },
+                        {
+                            label: 'Acciones',
+                            actions: [
+                                // {
+                                //     type: 'edit',
+                                //     icon: 'fa-edit',
+                                //     // action: (data) => UpdateValuesModal(data, setCurrentData, setUpdateModal),
+                                // },
+                                {
+                                    type: 'delete',
+                                    icon: 'fa-trash',
+                                    action: (data) => UpdateValuesModal(data, setCurrentData, setDeleteModal),
+                                    reference: 'id',
+                                    tooltipText: 'Eliminar'
+                                },
+                            ],
+                            // stickyR: true
+                        },
                     ]}
                     data={data.data}
-                    checkList={true}
+                    checkList={false}
                     selecteds={selecteds}
                     setSelecteds={setSelecteds}
                     selectAllChecked={selectAllChecked}
@@ -210,47 +211,48 @@ export const ListEfectivoGeneralHistorialTable = ({
                     stateData={stateData}
                 />
             </TableSection>
-            {/* <Paginator
-                paginate={paginate}
-                setPaginate={setPaginate}
-            /> */}
             {
                 createModal &&
                 <ModalForm
                     setModal={setCreateModal}
-                    label="Registrar Ingreso directo de efectivo"
-                    dataValues={CreateValues(params?.efectivo_id, true)}
-                    urlApi={`/efectivo_historial`}
+                    label="Crear cierre"
+                    dataValues={CreateValues(params?.efectivo_id)}
+                    urlApi={`/efectivo_cierre`}
                     method={'post'}
                     call={recall}
-                    buttonLabel='Registrar'
+                    buttonLabel='Crear cierre'
                 />
             }
-            {
-                egresoDirectoModal &&
-                <ModalForm
-                    setModal={setEgresoDirectoModal}
-                    label="Registrar Egreso directo de efectivo"
-                    dataValues={CreateValues(params?.efectivo_id, false)}
-                    urlApi={`/efectivo_historial`}
-                    method={'post'}
-                    call={recall}
-                    buttonLabel='Registrar'
+            {/* <div className="absolute z-10 bg-white text-xs font-bold dark:bg-gray-700 dark:text-gray-300 shadow-lg w-fit mt-1 rounded-md">
+                <DayPicker
+                    locale={es}
+                    mode="range"
+                    selected={selectedDay}
+                    onSelect={setSelectedDay}
+                    className="custom-day-picker"
+                    modifiersClassNames={{
+                        selected: 'my-selected',
+                        today: 'my-today',
+                        outside: 'days'
+                    }}
+                    modifiersStyles={{
+                        disabled: { fontSize: '75%' }
+                    }}
                 />
-            }
+            </div> */}
 
-            {/* {
+            {
                 deleteModal &&
                 <ModalForm
                     setModal={setDeleteModal}
-                    label="Eliminar producto del almacén"
+                    label="Eliminar cierre"
                     dataValues={DeleteValues(currentData)}
-                    urlApi={`/almacen_producto/${currentData.id}`}
+                    urlApi={`/efectivo_cierre/${currentData.id}`}
                     method={'delete'}
                     call={recall}
                     buttonLabel='Eliminar'
                 />
-            } */}
+            }
         </Section>
     )
 }
